@@ -1,31 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DataAccess.Interfaces;
 using Entities;
 
-namespace DataAccess
+namespace DataAccess.Repositories
 {
-    public class WorkItemRepository : IWorkItemRepository
+    public class UserRepository : IUserRepository
     {
-        public List<WorkItem> GetAll()
+        public User Add(User user)
         {
             throw new NotImplementedException();
         }
 
-        public WorkItem Find(int id)
+        public User Find(int id)
         {
             throw new NotImplementedException();
         }
 
-        public WorkItem Add(WorkItem workItem)
+        public List<User> FindByName(string name)
         {
             throw new NotImplementedException();
         }
 
-        public WorkItem Update(WorkItem workItem)
+        public List<User> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Team> GetTeams(int id)
         {
             throw new NotImplementedException();
         }
@@ -35,17 +37,12 @@ namespace DataAccess
             throw new NotImplementedException();
         }
 
-        public WorkItem FindByDescription(string text)
+        public User Update(User user)
         {
             throw new NotImplementedException();
         }
 
-        public List<WorkItem> FindIfIssue()
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<WorkItem> FindByStatus(Status status)
+        public List<WorkItem> WorkItems(int id)
         {
             throw new NotImplementedException();
         }
