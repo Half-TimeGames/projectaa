@@ -13,7 +13,7 @@ namespace DataAccess.Repositories
 {
     public class IssueRepository : IIssueRepository
     {
-        private IDbConnection _dbConnection = new SqlConnection("Data Source=MAJOR\\S" +
+        private readonly IDbConnection _dbConnection = new SqlConnection("Data Source=MAJOR\\S" +
                                                                 "QLEXPRESS;Initial Catalog=Projectaa_Db;Integrated Security=True");
         public Issue Add(Issue issue)
         {
@@ -28,7 +28,6 @@ namespace DataAccess.Repositories
         {
             return _dbConnection.Query<Issue>("SELECT * FROM Issue " +
                                               "WHERE Id = @Id", new { id }).SingleOrDefault();
-
         }
 
         public List<Issue> GetAll()
