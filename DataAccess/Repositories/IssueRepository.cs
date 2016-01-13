@@ -28,7 +28,6 @@ namespace DataAccess.Repositories
         {
             return _dbConnection.Query<Issue>("SELECT * FROM Issue " +
                                               "WHERE Id = @Id", new { id }).SingleOrDefault();
-
         }
 
         public List<Issue> GetAll()
