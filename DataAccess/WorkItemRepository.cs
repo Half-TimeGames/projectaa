@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +12,9 @@ namespace DataAccess
 {
     public class WorkItemRepository : IWorkItemRepository
     {
+        private IDbConnection _dbConnection = new SqlConnection("Data Source=MAJOR\\S" +
+                                                                "QLEXPRESS;Initial Catalog=Projectaa_Db;Integrated Security=True");
+
         public List<WorkItem> GetAll()
         {
             throw new NotImplementedException();

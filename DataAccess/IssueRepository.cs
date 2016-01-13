@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dapper;
 using DataAccess.Interfaces;
 using Entities;
 
@@ -10,29 +13,38 @@ namespace DataAccess
 {
     public class IssueRepository : IIssueRepository
     {
+        private IDbConnection _dbConnection = new SqlConnection("Data Source=MAJOR\\S" +
+                                                                "QLEXPRESS;Initial Catalog=Projectaa_Db;Integrated Security=True");
         public Issue Add(Issue issue)
         {
-            throw new NotImplementedException();
+            var sqlQuery = "insert into Issue (Description) values (@Description)";
+            var issueId = _dbConnection.Query<int>(sqlQuery, issue).Single();
+            issue.Id = issueId;
+            return issue;
         }
 
         public Issue Find(int id)
         {
-            throw new NotImplementedException();
+            return _dbConnection.Query<Issue>("select * from Issue where Id = @Id", id).SingleOrDefault();
+
         }
 
         public List<Issue> GetAll()
         {
-            throw new NotImplementedException();
+            return _dbConnection.Query<Issue>("select * from Issue").ToList();
         }
 
         public void Remove(int id)
         {
-            throw new NotImplementedException();
+            var sqlQuery = "delete from Issue where Id = @Id";
+            _dbConnection.Execute(sqlQuery, id);
         }
 
         public Issue Update(Issue issue)
         {
-            throw new NotImplementedException();
+            var sqlQuery = "update Issue set Description = @Description where Id = @Id";
+            _dbConnection.Execute(sqlQuery, issue);
+            return issue;
         }
     }
 }
