@@ -11,7 +11,8 @@ namespace DataAccess.Repositories
 {
     public class TeamRepository : ITeamRepository
     {
-        private readonly IDbConnection _dbConnection = new SqlConnection("Data Source=MAJOR\\SQLEXPRESS;Initial Catalog=Projectaa_Db;Integrated Security=True");
+        private IDbConnection _dbConnection = new SqlConnection("Server=tcp:projectaa.database.windows.net,1433;Database=projactaa_db;User ID=andreas.dellrud@projectaa;Password=TeAnAn2016;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+
         public Team Add(Team team)
         {
             const string sqlQuery = "INSERT INTO Team (Name) " +
