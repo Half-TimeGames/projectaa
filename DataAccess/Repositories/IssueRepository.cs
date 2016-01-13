@@ -13,8 +13,8 @@ namespace DataAccess.Repositories
 {
     public class IssueRepository : IIssueRepository
     {
-        private IDbConnection _dbConnection = new SqlConnection("Data Source=MAJOR\\S" +
-                                                                "QLEXPRESS;Initial Catalog=Projectaa_Db;Integrated Security=True");
+        private IDbConnection _dbConnection = new SqlConnection("Server=tcp:projectaa.database.windows.net,1433;Database=projactaa_db;User ID=andreas.dellrud@projectaa;Password=TeAnAn2016;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+
         public Issue Add(Issue issue)
         {
             var sqlQuery = "INSERT INTO Issue (Description) " +
