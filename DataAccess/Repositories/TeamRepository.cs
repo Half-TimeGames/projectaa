@@ -14,7 +14,7 @@ namespace DataAccess.Repositories
         private readonly IDbConnection _dbConnection = new SqlConnection("Data Source=MAJOR\\SQLEXPRESS;Initial Catalog=Projectaa_Db;Integrated Security=True");
         public Team Add(Team team)
         {
-            var sqlQuery = "INSERT INTO Team (Name) VALUES (@Name)";
+            const string sqlQuery = "INSERT INTO Team (Name) VALUES (@Name)";
             var teamId = _dbConnection.Query(sqlQuery, team).Single();
             team.Id = teamId;
             return team;
@@ -32,7 +32,7 @@ namespace DataAccess.Repositories
 
         public List<User> GetUsers(int id)
         {
-            var sqlQuery = "SELECT User_Id FROM TeamUser WHERE Team_Id = @TeamId";
+            const string sqlQuery = "SELECT User_Id FROM TeamUser WHERE Team_Id = @TeamId";
             var userIdList = _dbConnection.Query<int>(sqlQuery, new {id}).ToList();
 
             return userIdList.Select(i => _dbConnection.Query<User>("SELECT * FROM User WHERE Id = @UserId", new {i}).Single()).ToList();
@@ -50,10 +50,9 @@ namespace DataAccess.Repositories
 
         public Team Update(Team team)
         {
-            var sqlQuery =
-                "UPDATE Team " +
-                "SET Name = @Name " +
-                "WHERE Id = @Id";
+            const string sqlQuery = "UPDATE Team " +
+                                    "SET Name = @Name " +
+                                    "WHERE Id = @Id";
             _dbConnection.Execute(sqlQuery);
             return team;
         }
