@@ -18,7 +18,8 @@ namespace DataAccess.Repositories
 
         public User Add(User user)
         {
-            var sqlQuery = "insert into User (FirstName, LastName, UserName) values (@FirstName, @LastName, @UserName)";
+            var sqlQuery = "INSERT INTO User (FirstName, LastName, UserName) " +
+                           "VALUES (@FirstName, @LastName, @UserName)";
             var userId = _dbConnection.Query<int>(sqlQuery, user).Single();
             user.Id = userId;
             return user;
@@ -26,47 +27,58 @@ namespace DataAccess.Repositories
 
         public User Find(int id)
         {
-            return _dbConnection.Query<User>("select * from User where Id = @Id", id).SingleOrDefault();
+            return _dbConnection.Query<User>("SELECT * FROM User " +
+                                             "WHERE Id = @Id", new { id }).SingleOrDefault();
         }
 
         public List<User> FindByName(string name)
         {
             return
                 _dbConnection.Query<User>(
-                    "select * from User where (FirstName like @name) or (LastName like @Name) or (UserName like @Name)", name)
+                    "SELECT * FROM User " +
+                    "WHERE (FirstName LIKE @name) or (LastName LIKE @Name) or (UserName LIKE @Name)", new { name })
                     .ToList();
         }
 
         public List<User> GetAll()
         {
-            return _dbConnection.Query<User>("select * from User").ToList();
+            return _dbConnection.Query<User>("SELECT * FROM User").ToList();
         }
 
         public List<Team> GetTeams(int id)
         {
-            throw new NotImplementedException();
+            var sqlQuery = "SELECT Team_Id FROM TeamUser " +
+                           "WHERE User_Id = @UserId";
+            var teamIdList = _dbConnection.Query<int>(sqlQuery, new { UserId = id }).ToList();
+
+            return teamIdList.Select(i => _dbConnection.Query<Team>("SELECT * FROM Team " +
+                                                                    "WHERE Id = @TeamId", new { i }).Single()).ToList();
+
         }
 
         public void Remove(int id)
         {
-            var sqlQuery = "delete from User where Id = @Id";
-            _dbConnection.Execute(sqlQuery, id);
+            var sqlQuery = "DELETE FROM User " +
+                           "WHERE Id = @Id";
+            _dbConnection.Execute(sqlQuery, new { id });
         }
 
         public User Update(User user)
         {
-            var sqlQuery = "update User set " +
+            var sqlQuery = "UPDATE User " +
+                           "SET " +
                            "FirstName = @FirstName," +
                            "LastName = @LastName" +
                            "UserName = @UserName" +
-                           " where Id = @Id";
+                           " WHERE Id = @Id";
             _dbConnection.Execute(sqlQuery, user);
             return user;
         }
 
         public List<WorkItem> WorkItems(int id)
         {
-            throw new NotImplementedException();
+            return _dbConnection.Query<WorkItem>("SELECT * FROM WorkItem " +
+                                                 "WHERE User_Id = @UserId", new { id }).ToList();
         }
     }
 }

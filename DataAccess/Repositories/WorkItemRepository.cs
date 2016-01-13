@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dapper;
 using DataAccess.Interfaces;
 using Entities;
 
@@ -17,42 +18,69 @@ namespace DataAccess.Repositories
 
         public List<WorkItem> GetAll()
         {
-            throw new NotImplementedException();
+            return _dbConnection.Query<WorkItem>("SELECT * FROM WorkItem").ToList();
         }
 
         public WorkItem Find(int id)
         {
-            throw new NotImplementedException();
+            return _dbConnection.Query<WorkItem>("SELECT * FROM WorkItem " +
+                                             "WHERE Id = @Id", new { id }).Single();
         }
 
         public WorkItem Add(WorkItem workItem)
         {
-            throw new NotImplementedException();
+            var sqlQuery = "INSERT INTO WorkItem (Title, Description, DateCreated, Status_Id) " +
+                           "VALUES (@Title, @Description, @DateCreated, @StatusId)";
+            var workitemId = _dbConnection.Query(sqlQuery, workItem).Single();
+            workItem.Id = workitemId;
+            return workItem;
         }
 
         public WorkItem Update(WorkItem workItem)
         {
-            throw new NotImplementedException();
+            var sqlQuery = "UPDATE WorkItem " +
+                           "SET " +
+                           "Title = @Title," +
+                           "Description = @Description" +
+                           "Status_Id = @StatusId" +
+                           "Issue_Id = @IssueId" +
+                           "Team_Id = @TeamId" +
+                           "User_Id = @UserId" +
+                           " WHERE Id = @Id";
+            _dbConnection.Execute(sqlQuery, workItem);
+            return workItem;
         }
 
         public void Remove(int id)
         {
-            throw new NotImplementedException();
+            var sqlQuery = "DELETE FROM WorkItem " +
+                           "WHERE Id = @Id";
+            _dbConnection.Execute(sqlQuery, new { id });
         }
 
-        public WorkItem FindByDescription(string text)
+        public List<WorkItem> FindByDescription(string text)
         {
-            throw new NotImplementedException();
+            return
+                _dbConnection.Query<WorkItem>(
+                    "SELECT * FROM WorkItem " +
+                    "WHERE Description LIKE @text", new { text })
+                    .ToList();
         }
 
         public List<WorkItem> FindIfIssue()
         {
-            throw new NotImplementedException();
+            return
+                _dbConnection.Query<WorkItem>(
+                    "SELECT * FROM WorkItem " +
+                    "WHERE Issue_Id IS NULL")
+                    .ToList();
         }
 
         public List<WorkItem> FindByStatus(Status status)
         {
-            throw new NotImplementedException();
+            var sqlQuery = "SELECT * FROM WORKITEM" +
+                           "WHERE Status_Id = @StatusId";
+            return _dbConnection.Query<WorkItem>(sqlQuery, new {status.Id}).ToList();
         }
     }
 }

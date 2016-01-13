@@ -18,12 +18,31 @@ namespace DataAccess.Repositories
 
         public Status Find(int id)
         {
-            return _dbConnection.Query<Status>("select * from Status where Id = @Id", new {Id = id}).SingleOrDefault();
+            return _dbConnection.Query<Status>("SELECT * FROM Status " +
+                                               "WHERE Id = @Id", new { id }).SingleOrDefault();
+        }
+
+        public Status Update(Status status)
+        {
+            var sqlQuery = "UPDATE Status SET " +
+                           "Name = @Name " +
+                           "WHERE Id = @Id";
+            _dbConnection.Execute(sqlQuery, status);
+            return status;
+        }
+
+        public Status Add(Status status)
+        {
+            var sqlQuery = "INSERT INTO Status (Name) " +
+                           "VALUES (@Name)";
+            var statusId = _dbConnection.Query<int>(sqlQuery, status).Single();
+            status.Id = statusId;
+            return status;
         }
 
         public List<Status> GetAll()
         {
-            return _dbConnection.Query<Status>("select * from Status").ToList();
+            return _dbConnection.Query<Status>("SELECT * FROM Status").ToList();
         }
     }
 }
