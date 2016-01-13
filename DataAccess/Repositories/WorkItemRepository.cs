@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using DataAccess.Interfaces;
 using Entities;
 
-namespace DataAccess
+namespace DataAccess.Repositories
 {
     public class WorkItemRepository : IWorkItemRepository
     {

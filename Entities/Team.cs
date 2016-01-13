@@ -8,7 +8,7 @@ namespace Entities
 {
     public class Team
     {
-        public string Id { get; }
+        public string Id { get; set; }
         public string Name { get; set; }
 
         public ICollection<User> User { get; set; }

@@ -9,7 +9,7 @@ using Dapper;
 using DataAccess.Interfaces;
 using Entities;
 
-namespace DataAccess
+namespace DataAccess.Repositories
 {
     public class StatusRepository : IStatusRepository
     {
