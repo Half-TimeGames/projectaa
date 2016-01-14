@@ -8,7 +8,6 @@ namespace ProjectaaWebApi.Controllers
         [Route("{user}")]
         public void CreateUser(int id, string firstName, string lastName, string userName)
         {
-            
         }
     }
 }
