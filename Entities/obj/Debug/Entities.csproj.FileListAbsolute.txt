@@ -1,0 +1,8 @@
+C:\Users\Therese\Source\Repos\projectaa\Entities\bin\Debug\Entities.dll
+C:\Users\Therese\Source\Repos\projectaa\Entities\bin\Debug\Entities.pdb
+C:\Users\Therese\Source\Repos\projectaa\Entities\bin\Debug\Dapper.dll
+C:\Users\Therese\Source\Repos\projectaa\Entities\bin\Debug\Dapper.pdb
+C:\Users\Therese\Source\Repos\projectaa\Entities\bin\Debug\Dapper.xml
+C:\Users\Therese\Source\Repos\projectaa\Entities\obj\Debug\Entities.csprojResolveAssemblyReference.cache
+C:\Users\Therese\Source\Repos\projectaa\Entities\obj\Debug\Entities.dll
+C:\Users\Therese\Source\Repos\projectaa\Entities\obj\Debug\Entities.pdb
