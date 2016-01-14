@@ -1,84 +1,95 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Runtime.Serialization;
 using System.Web.Http;
-using System.Web.Http.Description;
 using DataAccess.Repositories;
 using Entities;
 
 namespace ProjectaaWebApi.Controllers
 {
-    [RoutePrefix("api/users")]
-    public class UserController : ApiController
+    [RoutePrefix("api/workitems")]
+    public class WorkItemController : ApiController
     {
-        readonly UserRepository _userRepository = new UserRepository();
+        readonly WorkItemRepository _workItemRepository = new WorkItemRepository();
         readonly TeamRepository _teamRepository = new TeamRepository();
+        readonly UserRepository _userRepository = new UserRepository();
 
-        [Route("{user}")]
-        [HttpPost]
-        public void CreateUser(int id, string firstName, string lastName, string userName)
-        {
-            var user = new User {FirstName = firstName, LastName = lastName, UserName = userName};
-            _userRepository.Add(user);
-        }
 
-        [Route("")]
-        public HttpResponseMessage GetAllUsers()
+        [Route("bystatus/{statusId:int}")]
+        public HttpResponseMessage GetWorkItemsByStatus(int statusId)
         {
             try
             {
-                var result = _userRepository.GetAll();
+                var result = _workItemRepository.FindByStatus(statusId);
                 return Request.CreateResponse(HttpStatusCode.OK, result);
             }
             catch (Exception e)
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, e.Message);
             }
-            
+
         }
 
-        [Route("{id:int}")]
-        public HttpResponseMessage GetUserById(int id)
+        [Route("byteam/{teamId:int}")]
+        public HttpResponseMessage GetWorkItemsByTeam(int teamId)
         {
             try
             {
-                var result = _userRepository.Find(id);
+                var result = _teamRepository.GetWorkItems(teamId);
                 return Request.CreateResponse(HttpStatusCode.OK, result);
             }
             catch (Exception e)
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, e.Message);
             }
+
         }
 
-        [Route("byteam/{id:int}")]
-        public HttpResponseMessage GetUsersByTeam(int id)
+        [Route("byuser/{userId:int}")]
+        public HttpResponseMessage GetWorkItemsByUser(int userId)
         {
             try
             {
-                var result = _teamRepository.GetUsers(id);
+                var result = _userRepository.WorkItems(userId);
                 return Request.CreateResponse(HttpStatusCode.OK, result);
             }
             catch (Exception e)
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, e.Message);
             }
+
         }
 
-        [Route("{name}")]
-        public HttpResponseMessage GetUsersByName(string name)
+        [Route("{text}")]
+        public HttpResponseMessage GetWorkItemsByDescription(string text)
         {
             try
             {
-                var result = _userRepository.FindByName(name);
+                var result = _workItemRepository.FindByDescription(text);
                 return Request.CreateResponse(HttpStatusCode.OK, result);
             }
             catch (Exception e)
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, e.Message);
             }
+
+        }
+
+        [Route("issues")]
+        public HttpResponseMessage GetWorkItemsWithIssue()
+        {
+            try
+            {
+                var result = _workItemRepository.FindIfIssue();
+                return Request.CreateResponse(HttpStatusCode.OK, result);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, e.Message);
+            }
+
         }
     }
 }

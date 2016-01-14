@@ -13,7 +13,8 @@ namespace DataAccess.Repositories
 {
     public class WorkItemRepository : IWorkItemRepository
     {
-        private readonly IDbConnection _dbConnection = new SqlConnection("Server=tcp:projectaa.database.windows.net,1433;Database=projactaa_db;User ID=andreas.dellrud@projectaa;Password=TeAnAn2016;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+        //private readonly IDbConnection _dbConnection = new SqlConnection("Server=tcp:projectaa.database.windows.net,1433;Database=projactaa_db;User ID=andreas.dellrud@projectaa;Password=TeAnAn2016;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+        private readonly IDbConnection _dbConnection = new SqlConnection("Data Source=LENOVO-PC\\SQLEXPRESS;Initial Catalog=Projectaa_Db;Integrated Security=True");
 
         public List<WorkItem> GetAll()
         {
@@ -23,7 +24,7 @@ namespace DataAccess.Repositories
         public WorkItem Find(int id)
         {
             return _dbConnection.Query<WorkItem>("SELECT * FROM WorkItem " +
-                                             "WHERE Id = @Id", new { id }).Single();
+                                                "WHERE Id = @Id", new { id }).Single();
         }
 
         public WorkItem Add(WorkItem workItem)
@@ -40,10 +41,10 @@ namespace DataAccess.Repositories
             var sqlQuery = "UPDATE WorkItem " +
                            "SET " +
                            "Title = @Title," +
-                           "Description = @Description" +
-                           "Status_Id = @StatusId" +
-                           "Issue_Id = @IssueId" +
-                           "Team_Id = @TeamId" +
+                           "Description = @Description," +
+                           "Status_Id = @StatusId," +
+                           "Issue_Id = @IssueId," +
+                           "Team_Id = @TeamId," +
                            "User_Id = @UserId" +
                            " WHERE Id = @Id";
             _dbConnection.Execute(sqlQuery, workItem);
@@ -62,7 +63,7 @@ namespace DataAccess.Repositories
             return
                 _dbConnection.Query<WorkItem>(
                     "SELECT * FROM WorkItem " +
-                    "WHERE Description LIKE @text", new { text })
+                    "WHERE Description LIKE '%" + text + "%'")
                     .ToList();
         }
 
@@ -75,11 +76,11 @@ namespace DataAccess.Repositories
                     .ToList();
         }
 
-        public List<WorkItem> FindByStatus(Status status)
+        public List<WorkItem> FindByStatus(int statusId)
         {
-            var sqlQuery = "SELECT * FROM WORKITEM" +
+            var sqlQuery = "SELECT * FROM WorkItem " +
                            "WHERE Status_Id = @StatusId";
-            return _dbConnection.Query<WorkItem>(sqlQuery, new {status.Id}).ToList();
+            return _dbConnection.Query<WorkItem>(sqlQuery, new { StatusId = statusId }).ToList();
         }
     }
 }

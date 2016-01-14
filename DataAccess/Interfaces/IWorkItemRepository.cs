@@ -12,6 +12,6 @@ namespace DataAccess.Interfaces
         void Remove(int id);
         List<WorkItem> FindByDescription(string text);
         List<WorkItem> FindIfIssue();
-        List<WorkItem> FindByStatus(Status status);
+        List<WorkItem> FindByStatus(int statusId);
     }
 }
