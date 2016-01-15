@@ -1,5 +1,9 @@
+<<<<<<< Updated upstream
 ﻿using System;
 using System.Collections.Generic;
+=======
+﻿using System.Collections.Generic;
+>>>>>>> Stashed changes
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -18,7 +22,7 @@ namespace DataAccess.Repositories
         {
             var sqlQuery = "INSERT INTO [User] (FirstName, LastName, UserName) " +
                            "VALUES (@FirstName, @LastName, @UserName)";
-            var userId = _dbConnection.Query<int>(sqlQuery, user).Single();
+            var userId = _dbConnection.Query<int>(sqlQuery, new {FirstName = user.FirstName, LastName = user.LastName, UserName = user.UserName});
             user.Id = userId;
             return user;
         }
@@ -33,7 +37,11 @@ namespace DataAccess.Repositories
         {
             return
                 _dbConnection.Query<User>("Declare @Name varchar(100);" +
+<<<<<<< Updated upstream
                                             "Set @Name = '%" + name + "%';" +
+=======
+                                            "SET @Name = '%" + name + "%';" +
+>>>>>>> Stashed changes
                                             "SELECT * FROM [User] " +
                                             "WHERE (FirstName LIKE @Name) or " +
                                             "(LastName LIKE @Name) or " +

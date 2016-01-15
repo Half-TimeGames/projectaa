@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 C:\Users\Therese\Source\Repos\projectaa\DataAccess\bin\Debug\DataAccess.dll
 C:\Users\Therese\Source\Repos\projectaa\DataAccess\bin\Debug\DataAccess.pdb
 C:\Users\Therese\Source\Repos\projectaa\DataAccess\bin\Debug\Dapper.dll
@@ -18,3 +19,25 @@ C:\Users\Anna\Source\Repos\projectaa\DataAccess\bin\Debug\Dapper.xml
 C:\Users\Anna\Source\Repos\projectaa\DataAccess\obj\Debug\DataAccess.csprojResolveAssemblyReference.cache
 C:\Users\Anna\Source\Repos\projectaa\DataAccess\obj\Debug\DataAccess.dll
 C:\Users\Anna\Source\Repos\projectaa\DataAccess\obj\Debug\DataAccess.pdb
+=======
+C:\Users\Therese\Source\Repos\projectaa\DataAccess\bin\Debug\DataAccess.dll
+C:\Users\Therese\Source\Repos\projectaa\DataAccess\bin\Debug\DataAccess.pdb
+C:\Users\Therese\Source\Repos\projectaa\DataAccess\bin\Debug\Dapper.dll
+C:\Users\Therese\Source\Repos\projectaa\DataAccess\bin\Debug\Entities.dll
+C:\Users\Therese\Source\Repos\projectaa\DataAccess\bin\Debug\Entities.pdb
+C:\Users\Therese\Source\Repos\projectaa\DataAccess\bin\Debug\Dapper.pdb
+C:\Users\Therese\Source\Repos\projectaa\DataAccess\bin\Debug\Dapper.xml
+C:\Users\Therese\Source\Repos\projectaa\DataAccess\obj\Debug\DataAccess.csprojResolveAssemblyReference.cache
+C:\Users\Therese\Source\Repos\projectaa\DataAccess\obj\Debug\DataAccess.dll
+C:\Users\Therese\Source\Repos\projectaa\DataAccess\obj\Debug\DataAccess.pdb
+C:\Users\andre\Documents\GitHubVisualStudio\projectaa\DataAccess\bin\Debug\DataAccess.dll
+C:\Users\andre\Documents\GitHubVisualStudio\projectaa\DataAccess\bin\Debug\DataAccess.pdb
+C:\Users\andre\Documents\GitHubVisualStudio\projectaa\DataAccess\bin\Debug\Dapper.dll
+C:\Users\andre\Documents\GitHubVisualStudio\projectaa\DataAccess\bin\Debug\Entities.dll
+C:\Users\andre\Documents\GitHubVisualStudio\projectaa\DataAccess\bin\Debug\Entities.pdb
+C:\Users\andre\Documents\GitHubVisualStudio\projectaa\DataAccess\bin\Debug\Dapper.pdb
+C:\Users\andre\Documents\GitHubVisualStudio\projectaa\DataAccess\bin\Debug\Dapper.xml
+C:\Users\andre\Documents\GitHubVisualStudio\projectaa\DataAccess\obj\Debug\DataAccess.csprojResolveAssemblyReference.cache
+C:\Users\andre\Documents\GitHubVisualStudio\projectaa\DataAccess\obj\Debug\DataAccess.dll
+C:\Users\andre\Documents\GitHubVisualStudio\projectaa\DataAccess\obj\Debug\DataAccess.pdb
+>>>>>>> Stashed changes

@@ -16,8 +16,9 @@ namespace ProjectaaWebApi.Controllers
 
         [Route("{user}")]
         [HttpPost]
-        public void CreateUser(int id, string firstName, string lastName, string userName)
+        public HttpResponseMessage AddUser(User user)
         {
+<<<<<<< Updated upstream
             var user = new User { FirstName = firstName, LastName = lastName, UserName = userName };
             _userRepository.Add(user);
         }
@@ -41,6 +42,31 @@ namespace ProjectaaWebApi.Controllers
         //    }
         //    _userRepository.Remove(id);
         //    return Ok(user);
+=======
+            var newUser = _userRepository.Add(user);
+            var response = Request.CreateResponse(HttpStatusCode.Created, newUser);
+            response.Headers.Location = new Uri(Request.RequestUri + user.Id.ToString());
+            return response;
+        }
+
+        //public User CreateUser(User user)
+        //{
+        //    try
+        //    {
+        //        var newUser = _userRepository.Add(user);
+        //        return newUser;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw new ArgumentException(e.Message);
+        //    }
+        //}
+
+        //[Route("")]
+        //public HttpResponseMessage UpdateUser()
+        //{
+
+>>>>>>> Stashed changes
         //}
 
         [Route("")]
@@ -49,12 +75,21 @@ namespace ProjectaaWebApi.Controllers
             try
             {
                 var result = _userRepository.GetAll();
+                foreach (var user in result)
+                {
+                    user.Teams = _userRepository.GetTeams(user.Id);
+                    user.WorkItems = _userRepository.WorkItems(user.Id);
+                }
                 return result;
             }
             catch (Exception e)
             {
                 throw new ArgumentNullException(e.Message);
             }
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
         }
 
         [Route("{id:int}")]
@@ -63,6 +98,9 @@ namespace ProjectaaWebApi.Controllers
             try
             {
                 var result = _userRepository.Find(id);
+                result.Teams = _userRepository.GetTeams(result.Id);
+                result.WorkItems = _userRepository.WorkItems(result.Id);
+
                 return result;
             }
             catch (Exception e)
@@ -77,6 +115,11 @@ namespace ProjectaaWebApi.Controllers
             try
             {
                 var result = _teamRepository.GetUsers(id);
+                foreach (var user in result)
+                {
+                    user.Teams = _userRepository.GetTeams(user.Id);
+                    user.WorkItems = _userRepository.WorkItems(user.Id);
+                }
                 return result;
             }
             catch (Exception e)
@@ -91,6 +134,11 @@ namespace ProjectaaWebApi.Controllers
             try
             {
                 var result = _userRepository.FindByName(name);
+                foreach (var user in result)
+                {
+                    user.Teams = _userRepository.GetTeams(user.Id);
+                    user.WorkItems = _userRepository.WorkItems(user.Id);
+                }
                 return result;
             }
             catch (Exception e)

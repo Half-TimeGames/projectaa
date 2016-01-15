@@ -18,7 +18,7 @@ namespace DataAccess.Repositories
 
         public Status Find(int id)
         {
-            return _dbConnection.Query<Status>("select * from Status where Id = @Id", new {Id = id}).SingleOrDefault();
+            return _dbConnection.Query<Status>("SELECT * FROM Status WHERE Id = @Id", new {Id = id}).SingleOrDefault();
         }
 
         public Status Update(Status status)
@@ -41,7 +41,7 @@ namespace DataAccess.Repositories
 
         public List<Status> GetAll()
         {
-            return _dbConnection.Query<Status>("select * from Status").ToList();
+            return _dbConnection.Query<Status>("SELECT * FROM Status").ToList();
         }
     }
 }
