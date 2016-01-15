@@ -24,6 +24,12 @@ namespace ProjectaaWebApi.Controllers
             _userRepository.Add(user);
         }
 
+        //[Route("")]
+        //public HttpResponseMessage UpdateUser()
+        //{
+            
+        //}
+
         [Route("")]
         public HttpResponseMessage GetAllUsers()
         {
