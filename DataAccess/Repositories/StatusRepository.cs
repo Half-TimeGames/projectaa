@@ -23,12 +23,20 @@ namespace DataAccess.Repositories
 
         public Status Update(Status status)
         {
-            throw new NotImplementedException();
+            var sqlQuery = "UPDATE Status SET " +
+                           "Name = @Name " +
+                           "WHERE Id = @Id";
+            _dbConnection.Execute(sqlQuery, status);
+            return status;
         }
 
         public Status Add(Status status)
         {
-            throw new NotImplementedException();
+            var sqlQuery = "INSERT INTO Status (Name) " +
+                           "VALUES (@Name)";
+            var statusId = _dbConnection.Query<int>(sqlQuery, status).Single();
+            status.Id = statusId;
+            return status;
         }
 
         public List<Status> GetAll()
