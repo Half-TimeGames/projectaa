@@ -10,8 +10,8 @@ namespace DataAccess.Interfaces
         WorkItem Add(WorkItem workItem);
         WorkItem Update(WorkItem workItem);
         void Remove(int id);
-        WorkItem FindByDescription(string text);
+        List<WorkItem> FindByDescription(string text);
         List<WorkItem> FindIfIssue();
-        List<WorkItem> FindByStatus(Status status);
+        List<WorkItem> FindByStatus(int statusId);
     }
 }

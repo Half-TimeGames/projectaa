@@ -21,6 +21,16 @@ namespace DataAccess.Repositories
             return _dbConnection.Query<Status>("select * from Status where Id = @Id", new {Id = id}).SingleOrDefault();
         }
 
+        public Status Update(Status status)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Status Add(Status status)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Status> GetAll()
         {
             return _dbConnection.Query<Status>("select * from Status").ToList();
