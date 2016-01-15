@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -10,8 +11,8 @@ namespace DataAccess.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        //private readonly IDbConnection _dbConnection = new SqlConnection("Server=tcp:projectaa.database.windows.net,1433;Database=projactaa_db;User ID=andreas.dellrud@projectaa;Password=TeAnAn2016;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-        private readonly IDbConnection _dbConnection = new SqlConnection("Data Source=LENOVO-PC\\SQLEXPRESS;Initial Catalog=Projectaa_Db;Integrated Security=True");
+        private readonly IDbConnection _dbConnection = new SqlConnection("Server=tcp:projectaa.database.windows.net,1433;Database=projactaa_db;User ID=andreas.dellrud@projectaa;Password=TeAnAn2016;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+        //private readonly IDbConnection _dbConnection = new SqlConnection("Data Source=LENOVO-PC\\SQLEXPRESS;Initial Catalog=Projectaa_Db;Integrated Security=True");
         public User Add(User user)
         {
             var sqlQuery = "INSERT INTO [User] (FirstName, LastName, UserName) " +
@@ -19,6 +20,11 @@ namespace DataAccess.Repositories
             var userId = _dbConnection.Query<int>(sqlQuery, user).Single();
             user.Id = userId;
             return user;
+        }
+
+        public User GetAll(int id)
+        {
+            throw new NotImplementedException();
         }
 
         public User Find(int id)

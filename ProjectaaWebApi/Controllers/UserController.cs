@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Runtime.Serialization;
 using System.Web.Http;
-using System.Web.Http.Description;
 using DataAccess.Repositories;
 using Entities;
 
@@ -20,14 +17,29 @@ namespace ProjectaaWebApi.Controllers
         [HttpPost]
         public void CreateUser(int id, string firstName, string lastName, string userName)
         {
-            var user = new User {FirstName = firstName, LastName = lastName, UserName = userName};
+            var user = new User { FirstName = firstName, LastName = lastName, UserName = userName };
             _userRepository.Add(user);
         }
 
-        //[Route("")]
-        //public HttpResponseMessage UpdateUser()
+        //[Route("api/users")]
+        //public HttpResponseMessage Post(User user)
         //{
-            
+        //    var response = Request.CreateResponse(HttpStatusCode.Created);
+        //    string uri = Url.Link("GetUserById", new { id = user.Id });
+        //    response.Headers.Location = new Uri(uri);
+        //    return response;
+        //}
+
+        //[ResponseType(typeof(User))]
+        //public IHttpActionResult DeleteUser(int id)
+        //{
+        //    User user = _userRepository.Find(id);
+        //    if (user == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    _userRepository.Remove(id);
+        //    return Ok(user);
         //}
 
         [Route("")]
@@ -41,8 +53,7 @@ namespace ProjectaaWebApi.Controllers
             catch (Exception e)
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest, e.Message);
-            }
-            
+            }         
         }
 
         [Route("{id:int}")]
