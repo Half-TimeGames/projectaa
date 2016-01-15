@@ -1,9 +1,4 @@
-<<<<<<< Updated upstream
-﻿using System;
 using System.Collections.Generic;
-=======
-﻿using System.Collections.Generic;
->>>>>>> Stashed changes
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -37,11 +32,8 @@ namespace DataAccess.Repositories
         {
             return
                 _dbConnection.Query<User>("Declare @Name varchar(100);" +
-<<<<<<< Updated upstream
                                             "Set @Name = '%" + name + "%';" +
-=======
                                             "SET @Name = '%" + name + "%';" +
->>>>>>> Stashed changes
                                             "SELECT * FROM [User] " +
                                             "WHERE (FirstName LIKE @Name) or " +
                                             "(LastName LIKE @Name) or " +

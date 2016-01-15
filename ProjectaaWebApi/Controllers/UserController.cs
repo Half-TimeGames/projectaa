@@ -11,27 +11,19 @@ namespace ProjectaaWebApi.Controllers
     [RoutePrefix("api/users")]
     public class UserController : ApiController
     {
-        readonly UserRepository _userRepository = new UserRepository();
-        readonly TeamRepository _teamRepository = new TeamRepository();
+        private readonly UserRepository _userRepository = new UserRepository();
+        private readonly TeamRepository _teamRepository = new TeamRepository();
 
         [Route("{user}")]
         [HttpPost]
         public HttpResponseMessage AddUser(User user)
         {
-<<<<<<< Updated upstream
-            var user = new User { FirstName = firstName, LastName = lastName, UserName = userName };
-            _userRepository.Add(user);
+            var newUser = _userRepository.Add(user);
+            var response = Request.CreateResponse(HttpStatusCode.Created, newUser);
+            response.Headers.Location = new Uri(Request.RequestUri + user.Id.ToString());
+            return response;
         }
 
-        //[Route("api/users")]
-        //public HttpResponseMessage Post(User user)
-        //{
-        //    var response = Request.CreateResponse(HttpStatusCode.Created);
-        //    string uri = Url.Link("GetUserById", new { id = user.Id });
-        //    response.Headers.Location = new Uri(uri);
-        //    return response;
-        //}
-            
         //[ResponseType(typeof(User))]
         //public IHttpActionResult DeleteUser(int id)
         //{
@@ -42,14 +34,9 @@ namespace ProjectaaWebApi.Controllers
         //    }
         //    _userRepository.Remove(id);
         //    return Ok(user);
-=======
-            var newUser = _userRepository.Add(user);
-            var response = Request.CreateResponse(HttpStatusCode.Created, newUser);
-            response.Headers.Location = new Uri(Request.RequestUri + user.Id.ToString());
-            return response;
-        }
+        //}
 
-        //public User CreateUser(User user)
+    //public User CreateUser(User user)
         //{
         //    try
         //    {
@@ -65,8 +52,7 @@ namespace ProjectaaWebApi.Controllers
         //[Route("")]
         //public HttpResponseMessage UpdateUser()
         //{
-
->>>>>>> Stashed changes
+        //    return null;
         //}
 
         [Route("")]
@@ -86,10 +72,6 @@ namespace ProjectaaWebApi.Controllers
             {
                 throw new ArgumentNullException(e.Message);
             }
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
         }
 
         [Route("{id:int}")]
