@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 using DataAccess.Repositories;
 using Entities;
 
@@ -15,27 +16,6 @@ namespace ProjectaaWebApi.Controllers
         private readonly TeamRepository _teamRepository = new TeamRepository();
 
         [Route("{user}")]
-        //[HttpPost]
-        //public HttpResponseMessage AddUser(User user)
-        //{
-        //    var newUser = _userRepository.Add(user);
-        //    var response = Request.CreateResponse(HttpStatusCode.Created, newUser);
-        //    response.Headers.Location = new Uri(Request.RequestUri + user.Id.ToString());
-        //    return response;
-        //}
-
-        //[ResponseType(typeof(User))]
-        //public IHttpActionResult DeleteUser(int id)
-        //{
-        //    User user = _userRepository.Find(id);
-        //    if (user == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    _userRepository.Remove(id);
-        //    return Ok(user);
-        //}
-
         public User CreateUser(User user)
         {
             try
@@ -49,11 +29,37 @@ namespace ProjectaaWebApi.Controllers
             }
         }
 
-        //[Route("")]
-        //public HttpResponseMessage UpdateUser()
-        //{
-        //    return null;
-        //}
+        [Route("delete/{id:int}")]
+        [ResponseType(typeof(User))]
+        public IHttpActionResult DeleteUser(int id)
+        {
+            try
+            {
+                User user = _userRepository.Find(id);
+                if (user == null) return NotFound();
+                _userRepository.Remove(id);
+                return Ok(user);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [Route("update/{user}")]
+        public IHttpActionResult UpdateUser(User user)
+        {
+            try
+            {
+                if (user == null) return NotFound();
+                _userRepository.Update(user);
+                return Ok();
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
 
         [Route("")]
         public List<User> GetAllUsers()
