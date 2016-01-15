@@ -29,7 +29,7 @@ namespace ProjectaaWebApi.Controllers
         //    response.Headers.Location = new Uri(uri);
         //    return response;
         //}
-
+            
         //[ResponseType(typeof(User))]
         //public IHttpActionResult DeleteUser(int id)
         //{
@@ -43,58 +43,58 @@ namespace ProjectaaWebApi.Controllers
         //}
 
         [Route("")]
-        public HttpResponseMessage GetAllUsers()
+        public List<User> GetAllUsers()
         {
             try
             {
                 var result = _userRepository.GetAll();
-                return Request.CreateResponse(HttpStatusCode.OK, result);
+                return result;
             }
             catch (Exception e)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, e.Message);
-            }         
+                throw new ArgumentNullException(e.Message);
+            }
         }
 
         [Route("{id:int}")]
-        public HttpResponseMessage GetUserById(int id)
+        public User GetUserById(int id)
         {
             try
             {
                 var result = _userRepository.Find(id);
-                return Request.CreateResponse(HttpStatusCode.OK, result);
+                return result;
             }
             catch (Exception e)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, e.Message);
+                throw new ArgumentNullException(e.Message);
             }
         }
 
         [Route("byteam/{id:int}")]
-        public HttpResponseMessage GetUsersByTeam(int id)
+        public List<User> GetUsersByTeam(int id)
         {
             try
             {
                 var result = _teamRepository.GetUsers(id);
-                return Request.CreateResponse(HttpStatusCode.OK, result);
+                return result;
             }
             catch (Exception e)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, e.Message);
+                throw new ArgumentNullException(e.Message);
             }
         }
 
         [Route("{name}")]
-        public HttpResponseMessage GetUsersByName(string name)
+        public List<User> GetUsersByName(string name)
         {
             try
             {
                 var result = _userRepository.FindByName(name);
-                return Request.CreateResponse(HttpStatusCode.OK, result);
+                return result;
             }
             catch (Exception e)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, e.Message);
+                throw new ArgumentNullException(e.Message);
             }
         }
     }

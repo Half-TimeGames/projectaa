@@ -13,8 +13,8 @@ namespace DataAccess.Repositories
 {
     public class StatusRepository : IStatusRepository
     {
-        private readonly IDbConnection _dbConnection = new SqlConnection("Data Source=MAJOR\\S" +
-                                                                "QLEXPRESS;Initial Catalog=Projectaa_Db;Integrated Security=True");
+        private readonly IDbConnection _dbConnection = new SqlConnection("Server=tcp:projectaa.database.windows.net,1433;Database=projactaa_db;User ID=andreas.dellrud@projectaa;Password=TeAnAn2016;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+        //private readonly IDbConnection _dbConnection = new SqlConnection("Data Source=LENOVO-PC\\SQLEXPRESS;Initial Catalog=Projectaa_Db;Integrated Security=True");
 
         public Status Find(int id)
         {
@@ -23,12 +23,20 @@ namespace DataAccess.Repositories
 
         public Status Update(Status status)
         {
-            throw new NotImplementedException();
+            var sqlQuery = "UPDATE Status SET " +
+                           "Name = @Name " +
+                           "WHERE Id = @Id";
+            _dbConnection.Execute(sqlQuery, status);
+            return status;
         }
 
         public Status Add(Status status)
         {
-            throw new NotImplementedException();
+            var sqlQuery = "INSERT INTO Status (Name) " +
+                           "VALUES (@Name)";
+            var statusId = _dbConnection.Query<int>(sqlQuery, status).Single();
+            status.Id = statusId;
+            return status;
         }
 
         public List<Status> GetAll()

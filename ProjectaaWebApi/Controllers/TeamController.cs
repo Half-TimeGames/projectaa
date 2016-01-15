@@ -5,25 +5,31 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using DataAccess.Repositories;
+using Entities;
 
 namespace ProjectaaWebApi.Controllers
 {
     [RoutePrefix("api/teams")]
     public class TeamController : ApiController
     {
+        //skapa team
+        //uppdatera team
+        //ta bort team
+        //lägga till user till team?
+
         readonly TeamRepository _teamRepository = new TeamRepository();
 
         [Route("")]
-        public HttpResponseMessage GetTeams()
+        public List<Team> GetTeams()
         {
             try
             {
                 var result = _teamRepository.GetAll();
-                return Request.CreateResponse(HttpStatusCode.OK, result);
+                return result;
             }
             catch (Exception e)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, e.Message);
+                throw new ArgumentNullException(e.Message);
             }
 
         }
