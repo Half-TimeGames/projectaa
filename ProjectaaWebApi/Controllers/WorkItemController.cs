@@ -18,76 +18,76 @@ namespace ProjectaaWebApi.Controllers
 
 
         [Route("bystatus/{statusId:int}")]
-        public HttpResponseMessage GetWorkItemsByStatus(int statusId)
+        public List<WorkItem> GetWorkItemsByStatus(int statusId)
         {
             try
             {
                 var result = _workItemRepository.FindByStatus(statusId);
-                return Request.CreateResponse(HttpStatusCode.OK, result);
+                return result;
             }
             catch (Exception e)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, e.Message);
+                throw new ArgumentNullException(e.Message);
             }
 
         }
 
         [Route("byteam/{teamId:int}")]
-        public HttpResponseMessage GetWorkItemsByTeam(int teamId)
+        public List<WorkItem> GetWorkItemsByTeam(int teamId)
         {
             try
             {
                 var result = _teamRepository.GetWorkItems(teamId);
-                return Request.CreateResponse(HttpStatusCode.OK, result);
+                return result;
             }
             catch (Exception e)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, e.Message);
+                throw new ArgumentNullException(e.Message);
             }
 
         }
 
         [Route("byuser/{userId:int}")]
-        public HttpResponseMessage GetWorkItemsByUser(int userId)
+        public List<WorkItem> GetWorkItemsByUser(int userId)
         {
             try
             {
                 var result = _userRepository.WorkItems(userId);
-                return Request.CreateResponse(HttpStatusCode.OK, result);
+                return result;
             }
             catch (Exception e)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, e.Message);
+                throw new ArgumentNullException(e.Message);
             }
 
         }
 
         [Route("{text}")]
-        public HttpResponseMessage GetWorkItemsByDescription(string text)
+        public List<WorkItem> GetWorkItemsByDescription(string text)
         {
             try
             {
                 var result = _workItemRepository.FindByDescription(text);
-                return Request.CreateResponse(HttpStatusCode.OK, result);
+                return result;
             }
             catch (Exception e)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, e.Message);
+                throw new ArgumentNullException(e.Message);
             }
 
         }
 
         [Route("issues")]
-        public HttpResponseMessage GetWorkItemsWithIssue()
+        public List<WorkItem> GetWorkItemsWithIssue()
         {
             try
             {
                 var result = _workItemRepository.FindIfIssue();
-                return Request.CreateResponse(HttpStatusCode.OK, result);
+                return result;
             }
             catch (Exception e)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, e.Message);
+                throw new ArgumentNullException(e.Message);
             }
 
         }
