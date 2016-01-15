@@ -13,7 +13,7 @@ namespace DataAccess.Repositories
 {
     public class StatusRepository : IStatusRepository
     {
-        private IDbConnection _dbConnection = new SqlConnection("Data Source=MAJOR\\S" +
+        private readonly IDbConnection _dbConnection = new SqlConnection("Data Source=MAJOR\\S" +
                                                                 "QLEXPRESS;Initial Catalog=Projectaa_Db;Integrated Security=True");
 
         public Status Find(int id)

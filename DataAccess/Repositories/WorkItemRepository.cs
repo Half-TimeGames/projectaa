@@ -12,7 +12,7 @@ namespace DataAccess.Repositories
 {
     public class WorkItemRepository : IWorkItemRepository
     {
-        private IDbConnection _dbConnection = new SqlConnection("Data Source=MAJOR\\S" +
+        private readonly IDbConnection _dbConnection = new SqlConnection("Data Source=MAJOR\\S" +
                                                                 "QLEXPRESS;Initial Catalog=Projectaa_Db;Integrated Security=True");
 
         public List<WorkItem> GetAll()

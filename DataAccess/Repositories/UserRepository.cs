@@ -13,12 +13,12 @@ namespace DataAccess.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private IDbConnection _dbConnection = new SqlConnection("Data Source=MAJOR\\S" +
+        private readonly IDbConnection _dbConnection = new SqlConnection("Data Source=MAJOR\\S" +
                                                                 "QLEXPRESS;Initial Catalog=Projectaa_Db;Integrated Security=True");
 
         public User Add(User user)
         {
-            var sqlQuery = "insert into User (FirstName, LastName, UserName) values (@FirstName, @LastName, @UserName)";
+            const string sqlQuery = "insert into User (FirstName, LastName, UserName) values (@FirstName, @LastName, @UserName)";
             var userId = _dbConnection.Query<int>(sqlQuery, user).Single();
             user.Id = userId;
             return user;
@@ -49,17 +49,17 @@ namespace DataAccess.Repositories
 
         public void Remove(int id)
         {
-            var sqlQuery = "delete from User where Id = @Id";
+            const string sqlQuery = "delete from User where Id = @Id";
             _dbConnection.Execute(sqlQuery, id);
         }
 
         public User Update(User user)
         {
-            var sqlQuery = "update User set " +
-                           "FirstName = @FirstName," +
-                           "LastName = @LastName" +
-                           "UserName = @UserName" +
-                           " where Id = @Id";
+            const string sqlQuery = "update User set " +
+                                    "FirstName = @FirstName," +
+                                    "LastName = @LastName" +
+                                    "UserName = @UserName" +
+                                    " where Id = @Id";
             _dbConnection.Execute(sqlQuery, user);
             return user;
         }

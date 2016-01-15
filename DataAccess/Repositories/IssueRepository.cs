@@ -13,11 +13,11 @@ namespace DataAccess.Repositories
 {
     public class IssueRepository : IIssueRepository
     {
-        private IDbConnection _dbConnection = new SqlConnection("Data Source=MAJOR\\S" +
+        private readonly IDbConnection _dbConnection = new SqlConnection("Data Source=MAJOR\\S" +
                                                                 "QLEXPRESS;Initial Catalog=Projectaa_Db;Integrated Security=True");
         public Issue Add(Issue issue)
         {
-            var sqlQuery = "insert into Issue (Description) values (@Description)";
+            const string sqlQuery = "insert into Issue (Description) values (@Description)";
             var issueId = _dbConnection.Query<int>(sqlQuery, issue).Single();
             issue.Id = issueId;
             return issue;
@@ -36,13 +36,13 @@ namespace DataAccess.Repositories
 
         public void Remove(int id)
         {
-            var sqlQuery = "delete from Issue where Id = @Id";
+            const string sqlQuery = "delete from Issue where Id = @Id";
             _dbConnection.Execute(sqlQuery, id);
         }
 
         public Issue Update(Issue issue)
         {
-            var sqlQuery = "update Issue set Description = @Description where Id = @Id";
+            const string sqlQuery = "update Issue set Description = @Description where Id = @Id";
             _dbConnection.Execute(sqlQuery, issue);
             return issue;
         }
