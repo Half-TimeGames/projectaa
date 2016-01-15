@@ -15,14 +15,14 @@ namespace ProjectaaWebApi.Controllers
         private readonly TeamRepository _teamRepository = new TeamRepository();
 
         [Route("{user}")]
-        [HttpPost]
-        public HttpResponseMessage AddUser(User user)
-        {
-            var newUser = _userRepository.Add(user);
-            var response = Request.CreateResponse(HttpStatusCode.Created, newUser);
-            response.Headers.Location = new Uri(Request.RequestUri + user.Id.ToString());
-            return response;
-        }
+        //[HttpPost]
+        //public HttpResponseMessage AddUser(User user)
+        //{
+        //    var newUser = _userRepository.Add(user);
+        //    var response = Request.CreateResponse(HttpStatusCode.Created, newUser);
+        //    response.Headers.Location = new Uri(Request.RequestUri + user.Id.ToString());
+        //    return response;
+        //}
 
         //[ResponseType(typeof(User))]
         //public IHttpActionResult DeleteUser(int id)
@@ -36,18 +36,18 @@ namespace ProjectaaWebApi.Controllers
         //    return Ok(user);
         //}
 
-    //public User CreateUser(User user)
-        //{
-        //    try
-        //    {
-        //        var newUser = _userRepository.Add(user);
-        //        return newUser;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        throw new ArgumentException(e.Message);
-        //    }
-        //}
+        public User CreateUser(User user)
+        {
+            try
+            {
+                var newUser = _userRepository.Add(user);
+                return newUser;
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException(e.Message);
+            }
+        }
 
         //[Route("")]
         //public HttpResponseMessage UpdateUser()

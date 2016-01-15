@@ -16,9 +16,14 @@ namespace DataAccess.Repositories
         public User Add(User user)
         {
             var sqlQuery = "INSERT INTO [User] (FirstName, LastName, UserName) " +
-                           "VALUES (@FirstName, @LastName, @UserName)";
-            var userId = _dbConnection.Query<int>(sqlQuery, new {FirstName = user.FirstName, LastName = user.LastName, UserName = user.UserName});
-            user.Id = userId;
+                           "VALUES (@" +
+                           "FirstName, @LastName, @UserName)"+
+                           "SELECT Id FROM [User] WHERE Id = scope_identity()";
+            if (user == null) return null;
+            var userId = _dbConnection.Query(sqlQuery, new {user.FirstName, user.LastName, user.UserName}).First();
+                
+            user.Id = userId.Id;
+
             return user;
         }
 
