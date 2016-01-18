@@ -19,7 +19,6 @@ namespace ProjectaaWebApi.Controllers
         //lägga till user till team?
 
         readonly TeamRepository _teamRepository = new TeamRepository();
-        readonly UserRepository _userRepository = new UserRepository();
 
         [HttpGet]
         [Route("teams")]
