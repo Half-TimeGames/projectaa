@@ -13,13 +13,12 @@ namespace DataAccess.Repositories
 {
     public class IssueRepository : IIssueRepository
     {
-        private readonly IDbConnection _dbConnection = new SqlConnection("Server=tcp:projectaa.database.windows.net,1433;Database=projactaa_db;User ID=andreas.dellrud@projectaa;Password=TeAnAn2016;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-        //private readonly IDbConnection _dbConnection = new SqlConnection("Data Source=LENOVO-PC\\SQLEXPRESS;Initial Catalog=Projectaa_Db;Integrated Security=True");
+        private readonly IDbConnection _dbConnection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["azureConnectionString"].ConnectionString);
 
         public Issue Add(Issue issue)
         {
-            var sqlQuery = "INSERT INTO Issue (Description) " +
-                           "VALUES (@Description)";
+            const string sqlQuery = "INSERT INTO Issue (Description) " +
+                                    "VALUES (@Description)";
             var issueId = _dbConnection.Query<int>(sqlQuery, issue).Single();
             issue.Id = issueId;
             return issue;
@@ -38,16 +37,16 @@ namespace DataAccess.Repositories
 
         public void Remove(int id)
         {
-            var sqlQuery = "DELETE FROM Issue " +
-                           "WHERE Id = @Id";
+            const string sqlQuery = "DELETE FROM Issue " +
+                                    "WHERE Id = @Id";
             _dbConnection.Execute(sqlQuery, new { id });
         }
 
         public Issue Update(Issue issue)
         {
-            var sqlQuery = "UPDATE Issue SET " +
-                           "Description = @Description " +
-                           "WHERE Id = @Id";
+            const string sqlQuery = "UPDATE Issue SET " +
+                                    "Description = @Description " +
+                                    "WHERE Id = @Id";
             _dbConnection.Execute(sqlQuery, issue);
             return issue;
         }
