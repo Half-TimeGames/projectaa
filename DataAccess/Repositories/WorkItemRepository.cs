@@ -14,7 +14,6 @@ namespace DataAccess.Repositories
     public class WorkItemRepository : IWorkItemRepository
     {
         private readonly IDbConnection _dbConnection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["azureConnectionString"].ConnectionString);
-        //private readonly IDbConnection _dbConnection = new SqlConnection("Data Source=LENOVO-PC\\SQLEXPRESS;Initial Catalog=Projectaa_Db;Integrated Security=True");
 
         public List<WorkItem> GetAll()
         {
