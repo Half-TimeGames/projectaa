@@ -1,10 +1,7 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Dapper;
 using DataAccess.Interfaces;
 using Entities;
@@ -13,14 +10,20 @@ namespace DataAccess.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        //private readonly IDbConnection _dbConnection = new SqlConnection("Server=tcp:projectaa.database.windows.net,1433;Database=projactaa_db;User ID=andreas.dellrud@projectaa;Password=TeAnAn2016;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-        private readonly IDbConnection _dbConnection = new SqlConnection("Data Source=LENOVO-PC\\SQLEXPRESS;Initial Catalog=Projectaa_Db;Integrated Security=True");
+        private readonly IDbConnection _dbConnection = new SqlConnection("Server=tcp:projectaa.database.windows.net,1433;Database=projactaa_db;User ID=andreas.dellrud@projectaa;Password=TeAnAn2016;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+        //private readonly IDbConnection _dbConnection = new SqlConnection("Data Source=LENOVO-PC\\SQLEXPRESS;Initial Catalog=Projectaa_Db;Integrated Security=True");
+
         public User Add(User user)
         {
             var sqlQuery = "INSERT INTO [User] (FirstName, LastName, UserName) " +
-                           "VALUES (@FirstName, @LastName, @UserName)";
-            var userId = _dbConnection.Query<int>(sqlQuery, user).Single();
-            user.Id = userId;
+                           "VALUES (@" +
+                           "FirstName, @LastName, @UserName)"+
+                           "SELECT Id FROM [User] WHERE Id = scope_identity()";
+            if (user == null) return null;
+            var userId = _dbConnection.Query(sqlQuery, new {user.FirstName, user.LastName, user.UserName}).First();
+                
+            user.Id = userId.Id;
+
             return user;
         }
 
@@ -35,6 +38,7 @@ namespace DataAccess.Repositories
             return
                 _dbConnection.Query<User>("Declare @Name varchar(100);" +
                                             "Set @Name = '%" + name + "%';" +
+                                            "SET @Name = '%" + name + "%';" +
                                             "SELECT * FROM [User] " +
                                             "WHERE (FirstName LIKE @Name) or " +
                                             "(LastName LIKE @Name) or " +
