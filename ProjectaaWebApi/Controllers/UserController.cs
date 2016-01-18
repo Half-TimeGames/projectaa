@@ -89,9 +89,6 @@ namespace ProjectaaWebApi.Controllers
             try
             {
                 var result = _userRepository.Find(id);
-                result.Teams = _userRepository.GetTeams(result.Id);
-                result.WorkItems = _userRepository.WorkItems(result.Id);
-
                 return Ok(result);
             }
             catch (Exception e)
@@ -100,13 +97,28 @@ namespace ProjectaaWebApi.Controllers
             }
         }
 
-        [Route("{int:id/teams")]
+        [Route("{id:int}/teams")]
         [ResponseType(typeof(List<User>))]
         public IHttpActionResult GetUsersByTeam(int id)
         {
             try
             {
                 var result = _userRepository.GetTeams(id);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        [Route("{id:int}/workitems")]
+        [ResponseType(typeof (List<WorkItem>))]
+        public IHttpActionResult GetWorkItems(int id)
+        {
+            try
+            {
+                var result = _userRepository.WorkItems(id);
                 return Ok(result);
             }
             catch (Exception e)

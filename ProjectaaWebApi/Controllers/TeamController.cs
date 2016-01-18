@@ -52,8 +52,8 @@ namespace ProjectaaWebApi.Controllers
             }
         }
 
-        [Route("{int:id}")]
-        [ResponseType(typeof (Team))]
+        [Route("{id:int}")]
+        [ResponseType(typeof(Team))]
         public IHttpActionResult GetTeam(int id)
         {
             try
@@ -61,7 +61,7 @@ namespace ProjectaaWebApi.Controllers
                 var team = _teamRepository.Find(id);
                 return Ok(team);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
