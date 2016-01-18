@@ -58,7 +58,6 @@ namespace DataAccess.Repositories
 
             return teamIdList.Select(i => _dbConnection.Query<Team>("SELECT * FROM Team " +
                                                                     "WHERE Id = @TeamId", new { TeamId = i }).Single()).ToList();
-
         }
 
         public void Remove(int id)
@@ -76,7 +75,7 @@ namespace DataAccess.Repositories
                            "LastName = @LastName," +
                            "UserName = @UserName" +
                            " WHERE Id = @Id";
-            _dbConnection.Execute(sqlQuery, user);
+            _dbConnection.Execute(sqlQuery, new {user.FirstName, user.LastName, user.UserName});
             return user;
         }
 
