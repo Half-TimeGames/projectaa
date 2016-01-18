@@ -17,12 +17,12 @@ namespace ProjectaaWebApi.Controllers
         readonly TeamRepository _teamRepository = new TeamRepository();
 
         [Route("")]
-        public List<Team> GetTeams()
+        public IHttpActionResult GetTeams()
         {
             try
             {
                 var result = _teamRepository.GetAll();
-                return result;
+                return Ok(result);
             }
             catch (Exception e)
             {

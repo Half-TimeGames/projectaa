@@ -11,7 +11,6 @@ namespace DataAccess.Repositories
     public class IssueRepository : IIssueRepository
     {
         private readonly IDbConnection _dbConnection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["azureConnectionString"].ConnectionString);
-        //private readonly IDbConnection _dbConnection = new SqlConnection("Data Source=LENOVO-PC\\SQLEXPRESS;Initial Catalog=Projectaa_Db;Integrated Security=True");
 
         public Issue Add(Issue issue)
         {
