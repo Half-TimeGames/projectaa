@@ -9,11 +9,10 @@ using Entities;
 
 namespace ProjectaaWebApi.Controllers
 {
-    [RoutePrefix("api/users")]
+    [RoutePrefix("api/user")]
     public class UserController : ApiController
     {
         private readonly UserRepository _userRepository = new UserRepository();
-        private readonly TeamRepository _teamRepository = new TeamRepository();
 
         [Route("{user}")]
         [ResponseType(typeof(User))]
@@ -30,13 +29,13 @@ namespace ProjectaaWebApi.Controllers
             }
         }
 
-        [Route("delete/{id:int}")]
+        [Route("{id:int}/delete")]
         [ResponseType(typeof(User))]
         public IHttpActionResult DeleteUser(int id)
         {
             try
             {
-                User user = _userRepository.Find(id);
+                var user = _userRepository.Find(id);
                 if (user == null) return NotFound();
                 _userRepository.Remove(id);
                 return Ok(user);
@@ -47,7 +46,7 @@ namespace ProjectaaWebApi.Controllers
             }
         }
 
-        [Route("update/{user}")]
+        [Route("{user}/update")]
         [ResponseType(typeof(User))]
         public IHttpActionResult UpdateUser(User user)
         {
@@ -63,7 +62,7 @@ namespace ProjectaaWebApi.Controllers
             }
         }
 
-        [Route("")]
+        [Route("users")]
         [ResponseType(typeof(List<User>))]
         public IHttpActionResult GetAllUsers()
         {
@@ -101,18 +100,13 @@ namespace ProjectaaWebApi.Controllers
             }
         }
 
-        [Route("byteam/{id:int}")]
+        [Route("{int:id/teams")]
         [ResponseType(typeof(List<User>))]
         public IHttpActionResult GetUsersByTeam(int id)
         {
             try
             {
-                var result = _teamRepository.GetUsers(id);
-                foreach (var user in result)
-                {
-                    user.Teams = _userRepository.GetTeams(user.Id);
-                    user.WorkItems = _userRepository.WorkItems(user.Id);
-                }
+                var result = _userRepository.GetTeams(id);
                 return Ok(result);
             }
             catch (Exception e)
@@ -128,11 +122,6 @@ namespace ProjectaaWebApi.Controllers
             try
             {
                 var result = _userRepository.FindByName(name);
-                foreach (var user in result)
-                {
-                    user.Teams = _userRepository.GetTeams(user.Id);
-                    user.WorkItems = _userRepository.WorkItems(user.Id);
-                }
                 return Ok(result);
             }
             catch (Exception e)
