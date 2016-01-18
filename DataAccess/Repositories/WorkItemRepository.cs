@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Dapper;
 using DataAccess.Interfaces;
 using Entities;
@@ -13,7 +11,7 @@ namespace DataAccess.Repositories
 {
     public class WorkItemRepository : IWorkItemRepository
     {
-        private readonly IDbConnection _dbConnection = new SqlConnection("Server=tcp:projectaa.database.windows.net,1433;Database=projactaa_db;User ID=andreas.dellrud@projectaa;Password=TeAnAn2016;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+        private readonly IDbConnection _dbConnection = new SqlConnection("Server=tcp:projectaa-server.database.windows.net,1433;Database=projectaa_db;User ID=projectaa@projectaa-server;Password=TeAnAn16;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
         //private readonly IDbConnection _dbConnection = new SqlConnection("Data Source=LENOVO-PC\\SQLEXPRESS;Initial Catalog=Projectaa_Db;Integrated Security=True");
 
         public List<WorkItem> GetAll()
@@ -30,8 +28,10 @@ namespace DataAccess.Repositories
         public WorkItem Add(WorkItem workItem)
         {
             var sqlQuery = "INSERT INTO WorkItem (Title, Description, DateCreated, Status_Id) " +
-                           "VALUES (@Title, @Description, @DateCreated, @StatusId)";
-            var workitemId = _dbConnection.Query(sqlQuery, workItem).Single();
+                           "VALUES (@Title, @Description," +  DateTime.Now + "," + 1 + ")" +
+                           "SELECT Id FROM WorkItem WHERE Id = scope_identity()";
+            if (workItem == null) return null;
+            var workitemId = _dbConnection.Query(sqlQuery, new {workItem.Title, workItem.Description}).Single();
             workItem.Id = workitemId;
             return workItem;
         }

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 using DataAccess.Repositories;
 using Entities;
 
@@ -16,6 +14,35 @@ namespace ProjectaaWebApi.Controllers
         readonly TeamRepository _teamRepository = new TeamRepository();
         readonly UserRepository _userRepository = new UserRepository();
 
+        [Route("{workitem}")]
+        [ResponseType(typeof(WorkItem))]
+        public IHttpActionResult CreateWorkItem(WorkItem workItem)
+        {
+            try
+            {
+                var newWorkItem = _workItemRepository.Add(workItem);
+                return Ok(newWorkItem);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        [HttpPut]
+        [Route("{workitem}")]
+        public WorkItem UpdateWorkItem(WorkItem workItem)
+        {
+            try
+            {
+                var newWorkItem = _workItemRepository.Update(workItem);
+                return newWorkItem;
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException(e.Message);
+            }
+        }
 
         [Route("bystatus/{statusId:int}")]
         public List<WorkItem> GetWorkItemsByStatus(int statusId)
