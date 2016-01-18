@@ -26,12 +26,6 @@ namespace ProjectaaWebApi.Controllers
             }
         }
 
-        //[Route("")]
-        //public HttpResponseMessage UpdateUser()
-        //{
-        //    return null;
-        //}
-
         [Route("")]
         public List<User> GetAllUsers()
         {
