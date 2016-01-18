@@ -21,6 +21,7 @@ namespace ProjectaaWebApi.Controllers
         readonly TeamRepository _teamRepository = new TeamRepository();
         readonly UserRepository _userRepository = new UserRepository();
 
+        [HttpGet]
         [Route("teams")]
         [ResponseType(typeof(List<Team>))]
         public IHttpActionResult GetTeams()
@@ -37,21 +38,7 @@ namespace ProjectaaWebApi.Controllers
 
         }
 
-        [Route("{team}")]
-        [ResponseType(typeof(Team))]
-        public IHttpActionResult CreateTeam(Team team)
-        {
-            try
-            {
-                var newTeam = _teamRepository.Add(team);
-                return Ok(newTeam);
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-        }
-
+        [HttpGet]
         [Route("{id:int}")]
         [ResponseType(typeof(Team))]
         public IHttpActionResult GetTeam(int id)
@@ -66,5 +53,93 @@ namespace ProjectaaWebApi.Controllers
                 throw new Exception(e.Message);
             }
         }
+
+        [HttpGet]
+        [Route("{id:int}/users")]
+        [ResponseType(typeof(List<User>))]
+        public IHttpActionResult GetUsers(int id)
+        {
+            try
+            {
+                var users = _teamRepository.GetUsers(id);
+                return Ok(users);
+            }
+
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("{id:int}/workitems")]
+        [ResponseType(typeof(List<WorkItem>))]
+        public IHttpActionResult GetWorkItems(int id)
+        {
+            try
+            {
+                var users = _teamRepository.GetWorkItems(id);
+                return Ok(users);
+            }
+
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("{teamId:int}/adduser/{userId:int}")]
+        [ResponseType(typeof (Team))]
+        public IHttpActionResult AddToTeam(int teamId, int userId)
+        {
+            try
+            {
+                var team = _teamRepository.AddUserToTeam(userId, teamId);
+                team.Users = _teamRepository.GetUsers(teamId);
+                return Ok(team);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("")]
+        [ResponseType(typeof(Team))]
+        public IHttpActionResult CreateTeam(Team team)
+        {
+            try
+            {
+                _teamRepository.Add(team);
+                return Ok(team);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+
+        [HttpPut]
+        [Route("")]
+        [ResponseType(typeof (Team))]
+        public IHttpActionResult UpdateTeam(Team team)
+        {
+            try
+            {
+                if (team == null) return BadRequest("User is null");
+
+                _teamRepository.Update(team);
+                return Ok(team);
+            }
+
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
     }
 }
