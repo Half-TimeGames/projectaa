@@ -33,5 +33,19 @@ namespace ProjectaaWebApi.Controllers
             }
 
         }
+
+        [Route("teams/{team}")]
+        public Team CreateTeam(Team team)
+        {
+            try
+            {
+                var newTeam = _teamRepository.Add(team);
+                return newTeam;
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException(e.Message);
+            }
+        }
     }
 }
