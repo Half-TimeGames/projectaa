@@ -62,5 +62,14 @@ namespace DataAccess.Repositories
             _dbConnection.Execute(sqlQuery);
             return team;
         }
+
+        public Team AddUserToTeam(int userId, int teamId)
+        {
+            const string sqlQuery = "INSERT INTO TeamUser (Team_Id, User_Id) " +
+                                    "VALUES (@Team_Id, @User_Id) " +
+                                    "SELECT * FROM Team " +
+                                    "WHERE Id = @Team_Id";
+            return _dbConnection.Query<Team>(sqlQuery, new { User_Id = userId, Team_Id = teamId }).First();
+        }
     }
 }

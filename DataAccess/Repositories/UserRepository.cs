@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 using Dapper;
 using DataAccess.Interfaces;
 using Entities;
+=======
+using System;
+>>>>>>> refs/remotes/origin/Andreas
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -65,6 +69,15 @@ namespace DataAccess.Repositories
             var sqlQuery = "DELETE FROM [User] " +
                            "WHERE Id = @Id";
             _dbConnection.Execute(sqlQuery, new { id });
+        }
+
+        public User AddUserToTeam(int userId, int teamId)
+        {
+            const string sqlQuery = "INSERT INTO TeamUser (Team_Id, User_Id) " +
+                                    "VALUES (@Team_Id, @User_Id) " +
+                                    "SELECT * FROM User " +
+                                    "WHERE Id = @User_Id";
+            return _dbConnection.Query<User>(sqlQuery, new { User_Id = userId, Team_Id = teamId }).First();
         }
 
         public User Update(User user)

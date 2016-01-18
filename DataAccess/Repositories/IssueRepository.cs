@@ -14,8 +14,8 @@ namespace DataAccess.Repositories
 
         public Issue Add(Issue issue)
         {
-            var sqlQuery = "INSERT INTO Issue (Description) " +
-                           "VALUES (@Description)";
+            const string sqlQuery = "INSERT INTO Issue (Description) " +
+                                    "VALUES (@Description)";
             var issueId = _dbConnection.Query<int>(sqlQuery, issue).Single();
             issue.Id = issueId;
             return issue;
@@ -34,16 +34,16 @@ namespace DataAccess.Repositories
 
         public void Remove(int id)
         {
-            var sqlQuery = "DELETE FROM Issue " +
-                           "WHERE Id = @Id";
+            const string sqlQuery = "DELETE FROM Issue " +
+                                    "WHERE Id = @Id";
             _dbConnection.Execute(sqlQuery, new { id });
         }
 
         public Issue Update(Issue issue)
         {
-            var sqlQuery = "UPDATE Issue SET " +
-                           "Description = @Description " +
-                           "WHERE Id = @Id";
+            const string sqlQuery = "UPDATE Issue SET " +
+                                    "Description = @Description " +
+                                    "WHERE Id = @Id";
             _dbConnection.Execute(sqlQuery, issue);
             return issue;
         }
