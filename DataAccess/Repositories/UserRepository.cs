@@ -1,10 +1,7 @@
-<<<<<<< HEAD
 using Dapper;
 using DataAccess.Interfaces;
 using Entities;
-=======
 using System;
->>>>>>> refs/remotes/origin/Andreas
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;

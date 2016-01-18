@@ -73,9 +73,9 @@ namespace ProjectaaWebApi.Controllers
                 return Ok(result);
             }
             catch (Exception e)
-                {
+            {
                 throw new Exception(e.Message);
-                }
+            }
         }
 
         [HttpGet]
@@ -118,14 +118,16 @@ namespace ProjectaaWebApi.Controllers
         {
             try
             {
+                if (user == null) return BadRequest("user is null");
                 var newUser = _userRepository.Add(user);
                 return Ok(newUser);
             }
             catch (Exception e)
             {
-                    user.Teams = _userRepository.GetTeams(user.Id);
-                    user.WorkItems = _userRepository.WorkItems(user.Id);
+                throw new Exception(e.Message);
+            }
         }
+
 
         [HttpPut]
         [Route("")]
