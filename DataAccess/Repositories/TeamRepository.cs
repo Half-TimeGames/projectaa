@@ -10,8 +10,7 @@ namespace DataAccess.Repositories
 {
     public class TeamRepository : ITeamRepository
     {
-        private readonly IDbConnection _dbConnection = new SqlConnection("Server=tcp:projectaa-server.database.windows.net,1433;Database=projectaa_db;User ID=projectaa@projectaa-server;Password=TeAnAn16;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-        //private readonly IDbConnection _dbConnection = new SqlConnection("Data Source=LENOVO-PC\\SQLEXPRESS;Initial Catalog=Projectaa_Db;Integrated Security=True");
+        private readonly IDbConnection _dbConnection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["azureConnectionString"].ConnectionString);
 
         public Team Add(Team team)
         {
@@ -62,6 +61,15 @@ namespace DataAccess.Repositories
                                     "WHERE Id = @Id";
             _dbConnection.Execute(sqlQuery);
             return team;
+        }
+
+        public Team AddUserToTeam(int userId, int teamId)
+        {
+            const string sqlQuery = "INSERT INTO TeamUser (Team_Id, User_Id) " +
+                                    "VALUES (@Team_Id, @User_Id) " +
+                                    "SELECT * FROM Team " +
+                                    "WHERE Id = @Team_Id";
+            return _dbConnection.Query<Team>(sqlQuery, new { User_Id = userId, Team_Id = teamId }).First();
         }
     }
 }

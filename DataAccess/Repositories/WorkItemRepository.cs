@@ -11,8 +11,7 @@ namespace DataAccess.Repositories
 {
     public class WorkItemRepository : IWorkItemRepository
     {
-        private readonly IDbConnection _dbConnection = new SqlConnection("Server=tcp:projectaa-server.database.windows.net,1433;Database=projectaa_db;User ID=projectaa@projectaa-server;Password=TeAnAn16;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-        //private readonly IDbConnection _dbConnection = new SqlConnection("Data Source=LENOVO-PC\\SQLEXPRESS;Initial Catalog=Projectaa_Db;Integrated Security=True");
+        private readonly IDbConnection _dbConnection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["azureConnectionString"].ConnectionString);
 
         public List<WorkItem> GetAll()
         {
