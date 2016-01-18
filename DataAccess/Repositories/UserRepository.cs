@@ -10,7 +10,7 @@ namespace DataAccess.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private readonly IDbConnection _dbConnection = new SqlConnection("Server=tcp:projectaa.database.windows.net,1433;Database=projactaa_db;User ID=andreas.dellrud@projectaa;Password=TeAnAn2016;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+        private readonly IDbConnection _dbConnection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["azureConnectionString"].ConnectionString);
         //private readonly IDbConnection _dbConnection = new SqlConnection("Data Source=LENOVO-PC\\SQLEXPRESS;Initial Catalog=Projectaa_Db;Integrated Security=True");
 
         public User Add(User user)
@@ -58,7 +58,6 @@ namespace DataAccess.Repositories
 
             return teamIdList.Select(i => _dbConnection.Query<Team>("SELECT * FROM Team " +
                                                                     "WHERE Id = @TeamId", new { TeamId = i }).Single()).ToList();
-
         }
 
         public void Remove(int id)
@@ -76,7 +75,7 @@ namespace DataAccess.Repositories
                            "LastName = @LastName," +
                            "UserName = @UserName" +
                            " WHERE Id = @Id";
-            _dbConnection.Execute(sqlQuery, user);
+            _dbConnection.Execute(sqlQuery, new {user.FirstName, user.LastName, user.UserName});
             return user;
         }
 
