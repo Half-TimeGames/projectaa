@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using DataAccess.Repositories;
 using Entities;
@@ -19,6 +16,35 @@ namespace ProjectaaWebApi.Controllers
 
         readonly TeamRepository _teamRepository = new TeamRepository();
 
+        [Route("{team}")]
+        public Team CreateTeam(Team team)
+        {
+            try
+            {
+                var newTeam = _teamRepository.Add(team);
+                return newTeam;
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException(e.Message);
+            }
+        }
+
+        [Route("{team}")]
+        public Team UpdateTeam(Team team)
+        {
+            try
+            {
+                var updatedTeam = _teamRepository.Update(team);
+                return updatedTeam;
+            }
+            catch (Exception e)
+            {
+                
+                throw new ArgumentException(e.Message);
+            }
+        }
+
         [Route("")]
         public List<Team> GetTeams()
         {
@@ -31,7 +57,6 @@ namespace ProjectaaWebApi.Controllers
             {
                 throw new ArgumentNullException(e.Message);
             }
-
         }
     }
 }
