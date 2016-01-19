@@ -3,7 +3,6 @@ using Entities;
 using System;
 using System.Collections.Generic;
 using System.Web.Http;
-using System.Web.Http.Description;
 
 namespace ProjectaaWebApi.Controllers
 {
@@ -45,6 +44,20 @@ namespace ProjectaaWebApi.Controllers
                 throw new ArgumentException(e.Message);
             }
         }
+
+        //[HttpDelete]
+        //[Route("{workItemId:int}")]
+        //public WorkItem DeleteWorkItem(int workItemId, [FromBody] WorkItem workItem)
+        //{
+        //    try
+        //    {
+                
+        //    }
+        //    catch (Exception e)
+        //    {                
+        //        throw new ArgumentException(e.Message);
+        //    }
+        //}
 
         [Route("status/{statusId:int}")]
         public List<WorkItem> GetWorkItemsByStatus(int statusId)
