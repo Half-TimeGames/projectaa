@@ -14,13 +14,13 @@ namespace ProjectaaWebApi.Controllers
 
 
         [HttpGet]
-        [Route("users")]
-        public List<User> GetAllUsers()
+        [Route("users/{pageNumber:int}/{rowsPerPage:int}")]
+        public List<User> GetAllUsers(int pageNumber, int rowsPerPage)
         {
             try
             {
-                var result = _userRepository.GetAll();
-                return result;
+                var users = _userRepository.GetAll(pageNumber, rowsPerPage);
+                return users;
             }
             catch (Exception e)
             {
@@ -137,13 +137,14 @@ namespace ProjectaaWebApi.Controllers
 
         [HttpDelete]
         [Route("{userId:int}")]
-        public void DeleteUser(int userId)
+        public User DeleteUser(int userId)
         {
             try
             {
                 var user = _userRepository.Find(userId);
                 if (user == null) throw new NullReferenceException();
                 _userRepository.Remove(userId);
+                return user;
             }
             catch (Exception e)
             {

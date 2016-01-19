@@ -45,9 +45,19 @@ namespace DataAccess.Repositories
                                             "(UserName LIKE @Name)").ToList();
         }
 
-        public List<User> GetAll()
+        public List<User> GetAll(int pageNumber, int rowsPerPage)
         {
-            return _dbConnection.Query<User>("SELECT * FROM [User]").ToList();
+            var sqlQuery = "DECLARE @PageNumber AS INT, @RowspPage AS INT " +
+                           "SET @PageNumber = " + pageNumber + " " +
+                           "SET @RowspPage = " + rowsPerPage + " " +
+                           "SELECT* FROM ( " +
+                           "SELECT ROW_NUMBER() OVER(ORDER BY Id) AS NUMBER, " +
+                           "Id, FirstName, LastName, UserName FROM [User]" +
+                           ") AS TBL " +
+                           "WHERE NUMBER  BETWEEN((@PageNumber - 1) * @RowspPage + 1)  AND(@PageNumber * @RowspPage)" +
+                           "ORDER BY Id";
+
+            return _dbConnection.Query<User>(sqlQuery).ToList();
         }
 
         public List<Team> GetTeams(int id)
