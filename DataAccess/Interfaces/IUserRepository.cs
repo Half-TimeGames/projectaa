@@ -13,5 +13,6 @@ namespace DataAccess.Interfaces
         List<Team> GetTeams(int id);
         List<WorkItem> WorkItems(int id);
         List<User> FindByName(string name);
+        User AddTeamToUser(int userId, int teamId);
     }
 }

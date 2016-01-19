@@ -16,17 +16,15 @@ namespace ProjectaaWebApi.Controllers
         //lägga till user till team?
 
         readonly TeamRepository _teamRepository = new TeamRepository();
-        readonly UserRepository _userRepository = new UserRepository();
 
         [HttpGet]
         [Route("teams")]
-        [ResponseType(typeof(List<Team>))]
-        public IHttpActionResult GetTeams()
+        public List<Team> GetTeams()
         {
             try
             {
-                var result = _teamRepository.GetAll();
-                return Ok(result);
+                var teams = _teamRepository.GetAll();
+                return teams;
             }
             catch (Exception e)
             {
@@ -36,14 +34,13 @@ namespace ProjectaaWebApi.Controllers
         }
 
         [HttpGet]
-        [Route("{id:int}")]
-        [ResponseType(typeof(Team))]
-        public IHttpActionResult GetTeam(int id)
+        [Route("{teamId:int}")]
+        public Team GetTeam(int teamId)
         {
             try
             {
-                var team = _teamRepository.Find(id);
-                return Ok(team);
+                var team = _teamRepository.Find(teamId);
+                return team;
             }
             catch (Exception e)
             {
@@ -52,14 +49,13 @@ namespace ProjectaaWebApi.Controllers
         }
 
         [HttpGet]
-        [Route("{id:int}/users")]
-        [ResponseType(typeof(List<User>))]
-        public IHttpActionResult GetUsers(int id)
+        [Route("{teamId:int}/users")]
+        public List<User> GetUsers(int teamId)
         {
             try
             {
-                var users = _teamRepository.GetUsers(id);
-                return Ok(users);
+                var users = _teamRepository.GetUsers(teamId);
+                return users;
             }
 
             catch (Exception e)
@@ -69,14 +65,13 @@ namespace ProjectaaWebApi.Controllers
         }
 
         [HttpGet]
-        [Route("{id:int}/workitems")]
-        [ResponseType(typeof(List<WorkItem>))]
-        public IHttpActionResult GetWorkItems(int id)
+        [Route("{teamId:int}/workitems")]
+        public List<WorkItem> GetWorkItems(int teamId)
         {
             try
             {
-                var users = _teamRepository.GetWorkItems(id);
-                return Ok(users);
+                var workItems = _teamRepository.GetWorkItems(teamId);
+                return workItems;
             }
 
             catch (Exception e)
@@ -85,32 +80,15 @@ namespace ProjectaaWebApi.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("{teamId:int}/adduser/{userId:int}")]
-        [ResponseType(typeof (Team))]
-        public IHttpActionResult AddToTeam(int teamId, int userId)
-        {
-            try
-            {
-                var team = _teamRepository.AddUserToTeam(userId, teamId);
-                team.Users = _teamRepository.GetUsers(teamId);
-                return Ok(team);
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-        }
 
         [HttpPost]
         [Route("")]
-        [ResponseType(typeof(Team))]
-        public IHttpActionResult CreateTeam(Team team)
+        public Team CreateTeam(Team team)
         {
             try
             {
                 _teamRepository.Add(team);
-                return Ok(team);
+                return team;
             }
             catch (Exception e)
             {
@@ -120,16 +98,15 @@ namespace ProjectaaWebApi.Controllers
 
 
         [HttpPut]
-        [Route("")]
-        [ResponseType(typeof (Team))]
-        public IHttpActionResult UpdateTeam(Team team)
+        [Route("{teamId:int}")]
+        public Team UpdateTeam(int teamId,[FromBody]Team team)
         {
             try
             {
-                if (team == null) return BadRequest("User is null");
+                if (team == null || team.Id != teamId) throw new Exception("Invalid team");
 
                 _teamRepository.Update(team);
-                return Ok(team);
+                return team;
             }
 
             catch (Exception e)
@@ -138,5 +115,20 @@ namespace ProjectaaWebApi.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("{teamId:int}/user/{userId:int}")]
+        public Team AddToTeam(int teamId, int userId)
+        {
+            try
+            {
+                var team = _teamRepository.AddUserToTeam(userId, teamId);
+                team.Users = _teamRepository.GetUsers(teamId);
+                return team;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
     }
 }

@@ -11,7 +11,6 @@ namespace DataAccess.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly IDbConnection _dbConnection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["azureConnectionString"].ConnectionString);
-        //private readonly IDbConnection _dbConnection = new SqlConnection("Data Source=LENOVO-PC\\SQLEXPRESS;Initial Catalog=Projectaa_Db;Integrated Security=True");
 
         public User Add(User user)
         {
@@ -67,7 +66,7 @@ namespace DataAccess.Repositories
             _dbConnection.Execute(sqlQuery, new { id });
         }
 
-        public User AddUserToTeam(int userId, int teamId)
+        public User AddTeamToUser(int userId, int teamId)
         {
             const string sqlQuery = "INSERT INTO TeamUser (Team_Id, User_Id) " +
                                     "VALUES (@Team_Id, @User_Id) " +
