@@ -1,13 +1,16 @@
-﻿using DataAccess.Repositories;
-using Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using DataAccess.Repositories;
+using Entities;
 
 namespace ProjectaaWebApi.Controllers
 {
-    [RoutePrefix("api/teams")]
+    [RoutePrefix("api/team")]
     public class TeamController : ApiController
     {
         //skapa team
@@ -16,6 +19,7 @@ namespace ProjectaaWebApi.Controllers
         //lägga till user till team?
 
         readonly TeamRepository _teamRepository = new TeamRepository();
+        readonly UserRepository _userRepository = new UserRepository();
 
         [HttpGet]
         [Route("teams")]
@@ -29,7 +33,7 @@ namespace ProjectaaWebApi.Controllers
             }
             catch (Exception e)
             {
-                throw new ArgumentNullException(e.Message);
+                throw new Exception(e.Message);
             }
 
         }
@@ -133,7 +137,7 @@ namespace ProjectaaWebApi.Controllers
 
             catch (Exception e)
             {
-                throw new ArgumentException(e.Message);
+                throw new Exception(e.Message);
             }
         }
 

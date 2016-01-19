@@ -1,20 +1,52 @@
-﻿using DataAccess.Repositories;
-using Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Web.Http;
+using System.Web.Http.Description;
+using DataAccess.Repositories;
+using Entities;
 
 namespace ProjectaaWebApi.Controllers
 {
-    [RoutePrefix("api/workitems")]
+    [RoutePrefix("api/workitem")]
     public class WorkItemController : ApiController
     {
         readonly WorkItemRepository _workItemRepository = new WorkItemRepository();
-        readonly TeamRepository _teamRepository = new TeamRepository();
         readonly UserRepository _userRepository = new UserRepository();
+        readonly TeamRepository _teamRepository = new TeamRepository();
 
+        [HttpPost]
+        [Route("")]
+        [ResponseType(typeof(WorkItem))]
+        public IHttpActionResult CreateWorkItem(WorkItem workItem)
+        {
+            try
+            {
+                if(workItem == null) return BadRequest("WorkItem is null"); 
+                var newWorkItem = _workItemRepository.Add(workItem);
+                return Ok(newWorkItem);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
 
-        [Route("bystatus/{statusId:int}")]
+        [HttpPut]
+        [Route("")]
+        public WorkItem UpdateWorkItem(WorkItem workItem)
+        {
+            try
+            {
+                var newWorkItem = _workItemRepository.Update(workItem);
+                return newWorkItem;
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException(e.Message);
+            }
+        }
+
+        [Route("{statusId:int}/bystatus")]
         public List<WorkItem> GetWorkItemsByStatus(int statusId)
         {
             try
@@ -29,7 +61,7 @@ namespace ProjectaaWebApi.Controllers
 
         }
 
-        [Route("byteam/{teamId:int}")]
+        [Route("{teamId:int}/byteam")]
         public List<WorkItem> GetWorkItemsByTeam(int teamId)
         {
             try
@@ -44,7 +76,7 @@ namespace ProjectaaWebApi.Controllers
 
         }
 
-        [Route("byuser/{userId:int}")]
+        [Route("{userId:int}/byuser")]
         public List<WorkItem> GetWorkItemsByUser(int userId)
         {
             try

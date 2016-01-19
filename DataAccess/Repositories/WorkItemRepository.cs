@@ -1,10 +1,11 @@
-﻿using Dapper;
-using DataAccess.Interfaces;
-using Entities;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using Dapper;
+using DataAccess.Interfaces;
+using Entities;
 
 namespace DataAccess.Repositories
 {
@@ -26,8 +27,10 @@ namespace DataAccess.Repositories
         public WorkItem Add(WorkItem workItem)
         {
             var sqlQuery = "INSERT INTO WorkItem (Title, Description, DateCreated, Status_Id) " +
-                           "VALUES (@Title, @Description, @DateCreated, @StatusId)";
-            var workitemId = _dbConnection.Query(sqlQuery, workItem).Single();
+                           "VALUES (@Title, @Description," +  DateTime.Now + "," + 1 + ")" +
+                           "SELECT Id FROM WorkItem WHERE Id = scope_identity()";
+            if (workItem == null) return null;
+            var workitemId = _dbConnection.Query(sqlQuery, new {workItem.Title, workItem.Description}).Single();
             workItem.Id = workitemId;
             return workItem;
         }

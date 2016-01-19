@@ -1,11 +1,11 @@
-using Dapper;
-using DataAccess.Interfaces;
-using Entities;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using Dapper;
+using DataAccess.Interfaces;
+using Entities;
 
 namespace DataAccess.Repositories
 {
@@ -16,7 +16,7 @@ namespace DataAccess.Repositories
 
         public User Add(User user)
         {
-            var sqlQuery = "INSERT INTO [User] (FirstName, LastName, UserName) " +
+            const string sqlQuery = "INSERT INTO [User] (FirstName, LastName, UserName) " +
                            "VALUES (@" +
                            "FirstName, @LastName, @UserName)"+
                            "SELECT Id FROM [User] WHERE Id = scope_identity()";
@@ -53,7 +53,7 @@ namespace DataAccess.Repositories
 
         public List<Team> GetTeams(int id)
         {
-            var sqlQuery = "SELECT Team_Id FROM TeamUser " +
+            const string sqlQuery = "SELECT Team_Id FROM TeamUser " +
                            "WHERE User_Id = @UserId";
             var teamIdList = _dbConnection.Query<int>(sqlQuery, new { UserId = id }).ToList();
 
@@ -63,7 +63,7 @@ namespace DataAccess.Repositories
 
         public void Remove(int id)
         {
-            var sqlQuery = "DELETE FROM [User] " +
+            const string sqlQuery = "DELETE FROM [User] " +
                            "WHERE Id = @Id";
             _dbConnection.Execute(sqlQuery, new { id });
         }
@@ -79,7 +79,7 @@ namespace DataAccess.Repositories
 
         public User Update(User user)
         {
-            var sqlQuery = "UPDATE [User] " +
+            const string sqlQuery = "UPDATE [User] " +
                            "SET " +
                            "FirstName = @FirstName," +
                            "LastName = @LastName," +

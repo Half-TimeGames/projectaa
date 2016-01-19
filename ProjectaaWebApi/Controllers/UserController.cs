@@ -1,17 +1,18 @@
-﻿using DataAccess.Repositories;
-using Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using DataAccess.Repositories;
+using Entities;
 
 namespace ProjectaaWebApi.Controllers
 {
-    [RoutePrefix("api/users")]
+    [RoutePrefix("api/user")]
     public class UserController : ApiController
     {
         private readonly UserRepository _userRepository = new UserRepository();
-        private readonly TeamRepository _teamRepository = new TeamRepository();
 
 
         [HttpGet]
@@ -118,7 +119,6 @@ namespace ProjectaaWebApi.Controllers
         {
             try
             {
-                if (user == null) return BadRequest("user is null");
                 var newUser = _userRepository.Add(user);
                 return Ok(newUser);
             }
@@ -127,7 +127,6 @@ namespace ProjectaaWebApi.Controllers
                 throw new Exception(e.Message);
             }
         }
-
 
         [HttpPut]
         [Route("")]
