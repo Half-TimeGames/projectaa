@@ -14,12 +14,12 @@ namespace ProjectaaWebApi.Controllers
 
 
         [HttpGet]
-        [Route("users/{pageNumber:int}/{rowsPerPage:int}")]
-        public List<User> GetAllUsers(int pageNumber, int rowsPerPage)
+        [Route("users")]
+        public List<User> GetAllUsers(int page, int perPage)
         {
             try
             {
-                var users = _userRepository.GetAll(pageNumber, rowsPerPage);
+                var users = _userRepository.GetAll(page, perPage);
                 return users;
             }
             catch (Exception e)
