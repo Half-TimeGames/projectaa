@@ -13,6 +13,11 @@ namespace ProjectaaWebApi.Controllers
         readonly UserRepository _userRepository = new UserRepository();
         readonly TeamRepository _teamRepository = new TeamRepository();
 
+        //ändra status på workitem
+        //tilldela workitem till user
+        //hämta workitems för en user
+        //hämta workitem med status done för en viss period på "datedone"
+
         [HttpPost]
         [Route("")]
         public WorkItem CreateWorkItem(WorkItem workItem)
@@ -45,19 +50,52 @@ namespace ProjectaaWebApi.Controllers
             }
         }
 
-        //[HttpDelete]
-        //[Route("{workItemId:int}")]
-        //public WorkItem DeleteWorkItem(int workItemId, [FromBody] WorkItem workItem)
-        //{
-        //    try
-        //    {
-                
-        //    }
-        //    catch (Exception e)
-        //    {                
-        //        throw new ArgumentException(e.Message);
-        //    }
-        //}
+        [HttpDelete]
+        [Route("{workItemId:int}")]
+        public WorkItem DeleteWorkItem(int workItemId)
+        {
+            try
+            {
+                var workItem = _workItemRepository.Find(workItemId);
+                if (workItem == null) throw new NullReferenceException();
+                _workItemRepository.Remove(workItemId);
+                return workItem;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        [HttpPut]
+        [Route("{workItemId:int}/user/{userId:int}")]
+        public WorkItem AddWorkItemToUser(int workItemId, int userId)
+        {
+            try
+            {
+                var workItem = _workItemRepository.AddUserToWorkItem(workItemId, userId);
+                return workItem;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("workitems/{pageNumber:int}/{rowsPerPage:int}")]
+        public List<WorkItem> GetAllWorkItems(int pageNumber, int rowsPerPage)
+        {
+            try
+            {
+                var workItem = _workItemRepository.GetAll(pageNumber, rowsPerPage);
+                return workItem;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
 
         [Route("status/{statusId:int}")]
         public List<WorkItem> GetWorkItemsByStatus(int statusId)

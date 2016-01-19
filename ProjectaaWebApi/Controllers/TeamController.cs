@@ -3,7 +3,6 @@ using Entities;
 using System;
 using System.Collections.Generic;
 using System.Web.Http;
-using System.Web.Http.Description;
 
 namespace ProjectaaWebApi.Controllers
 {
@@ -30,7 +29,6 @@ namespace ProjectaaWebApi.Controllers
             {
                 throw new Exception(e.Message);
             }
-
         }
 
         [HttpGet]
@@ -80,7 +78,6 @@ namespace ProjectaaWebApi.Controllers
             }
         }
 
-
         [HttpPost]
         [Route("")]
         public Team CreateTeam(Team team)
@@ -96,7 +93,6 @@ namespace ProjectaaWebApi.Controllers
             }
         }
 
-
         [HttpPut]
         [Route("{teamId:int}")]
         public Team UpdateTeam(int teamId,[FromBody]Team team)
@@ -104,11 +100,9 @@ namespace ProjectaaWebApi.Controllers
             try
             {
                 if (team == null || team.Id != teamId) throw new Exception("Invalid team");
-
                 _teamRepository.Update(team);
                 return team;
             }
-
             catch (Exception e)
             {
                 throw new Exception(e.Message);

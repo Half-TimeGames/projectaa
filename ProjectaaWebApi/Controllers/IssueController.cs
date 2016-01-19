@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using DataAccess.Repositories;
 using System.Web.Http.Description;
@@ -17,12 +13,12 @@ namespace ProjectaaWebApi.Controllers
         private readonly IssueRepository _issueRepository = new IssueRepository();
 
         [HttpGet]
-        [Route("issues")]
-        public List<Issue> GetAllIssues()
+        [Route("issues/{pageNumber:int}/{rowsPerPage:int}")]
+        public List<Issue> GetAllIssues(int pageNumber, int rowsPerPage)
         {
             try
             {
-                var issues = _issueRepository.GetAll();
+                var issues = _issueRepository.GetAll(pageNumber, rowsPerPage);
                 return issues;
             }
             catch (Exception e)
@@ -46,7 +42,6 @@ namespace ProjectaaWebApi.Controllers
                 throw new Exception(e.Message);
             }
         }
-
 
         [HttpGet]
         [Route("{issueId:int}/workitem")]

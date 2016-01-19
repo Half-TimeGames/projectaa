@@ -5,7 +5,7 @@ namespace DataAccess.Interfaces
 {
     public interface IWorkItemRepository
     {
-        List<WorkItem> GetAll();
+        List<WorkItem> GetAll(int pageNumber, int rowsPerPage);
         WorkItem Find(int id);
         WorkItem Add(WorkItem workItem);
         WorkItem Update(WorkItem workItem);

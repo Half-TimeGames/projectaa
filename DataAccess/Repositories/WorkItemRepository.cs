@@ -13,9 +13,18 @@ namespace DataAccess.Repositories
     {
         private readonly IDbConnection _dbConnection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["azureConnectionString"].ConnectionString);
 
-        public List<WorkItem> GetAll()
+        public List<WorkItem> GetAll(int pageNumber, int rowsPerPage)
         {
-            return _dbConnection.Query<WorkItem>("SELECT * FROM WorkItem").ToList();
+            var sqlQuery = "DECLARE @PageNumber AS INT, @RowspPage AS INT " +
+                           "SET @PageNumber = " + pageNumber + " " +
+                           "SET @RowspPage = " + rowsPerPage + " " +
+                           "SELECT* FROM ( " +
+                           "SELECT ROW_NUMBER() OVER(ORDER BY Id) AS NUMBER, " +
+                           "Id, Title, Description, DateCreated, DateFinished, Status_Id FROM WorkItem" +
+                           ") AS TBL " +
+                           "WHERE NUMBER  BETWEEN((@PageNumber - 1) * @RowspPage + 1)  AND(@PageNumber * @RowspPage)" +
+                           "ORDER BY Id";
+            return _dbConnection.Query<WorkItem>(sqlQuery).ToList();
         }
 
         public WorkItem Find(int id)
@@ -26,12 +35,13 @@ namespace DataAccess.Repositories
 
         public WorkItem Add(WorkItem workItem)
         {
-            var sqlQuery = "INSERT INTO WorkItem (Title, Description, DateCreated, Status_Id) " +
-                           "VALUES (@Title, @Description," +  DateTime.Now + "," + 1 + ")" +
+            var sqlQuery = "INSERT INTO WorkItem (Title, Description, DateCreated, Status_Id, DateFinished) " +
+                           "VALUES (@Title, @Description,'" + DateTime.Now.ToShortDateString() + "', 1, NULL)" +
                            "SELECT Id FROM WorkItem WHERE Id = scope_identity()";
             if (workItem == null) return null;
-            var workitemId = _dbConnection.Query(sqlQuery, new {workItem.Title, workItem.Description}).Single();
-            workItem.Id = workitemId;
+            var workitemId = _dbConnection.Query(sqlQuery, new {workItem.Title, workItem.Description}).First();
+            workItem.Id = workitemId.Id;
+            workItem.DateCreated = DateTime.Now.ToShortDateString();
             return workItem;
         }
 
@@ -55,6 +65,16 @@ namespace DataAccess.Repositories
             var sqlQuery = "DELETE FROM WorkItem " +
                            "WHERE Id = @Id";
             _dbConnection.Execute(sqlQuery, new { id });
+        }
+
+        public WorkItem AddUserToWorkItem(int userId, int workItemId)
+        {
+            const string sqlQuery = "UPDATE WorkItem " +
+                                 "SET " +
+                                 "User_Id = @userId " +
+                                 "WHERE Id = @workItemId " +
+                                 "SELECT * FROM WorkItem WHERE Id = workItemId";
+            return _dbConnection.Query<WorkItem>(sqlQuery, new { userId, workItemId }).Single();
         }
 
         public List<WorkItem> FindByDescription(string text)

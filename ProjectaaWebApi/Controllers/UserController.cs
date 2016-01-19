@@ -3,7 +3,6 @@ using Entities;
 using System;
 using System.Collections.Generic;
 using System.Web.Http;
-using System.Web.Http.Description;
 
 namespace ProjectaaWebApi.Controllers
 {
@@ -11,7 +10,6 @@ namespace ProjectaaWebApi.Controllers
     public class UserController : ApiController
     {
         private readonly UserRepository _userRepository = new UserRepository();
-
 
         [HttpGet]
         [Route("users")]
