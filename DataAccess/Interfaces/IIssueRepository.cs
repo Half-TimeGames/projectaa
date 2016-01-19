@@ -10,5 +10,6 @@ namespace DataAccess.Interfaces
         Issue Add(Issue issue);
         Issue Update(Issue issue);
         void Remove(int id);
+        WorkItem GetWorkItem(int id);
     }
 }

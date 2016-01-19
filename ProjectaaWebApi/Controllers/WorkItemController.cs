@@ -16,14 +16,13 @@ namespace ProjectaaWebApi.Controllers
 
         [HttpPost]
         [Route("")]
-        [ResponseType(typeof(WorkItem))]
-        public IHttpActionResult CreateWorkItem(WorkItem workItem)
+        public WorkItem CreateWorkItem(WorkItem workItem)
         {
             try
             {
-                if(workItem == null) return BadRequest("WorkItem is null"); 
+                if(workItem == null) throw new NullReferenceException();
                 var newWorkItem = _workItemRepository.Add(workItem);
-                return Ok(newWorkItem);
+                return newWorkItem;
             }
             catch (Exception e)
             {
@@ -32,11 +31,12 @@ namespace ProjectaaWebApi.Controllers
         }
 
         [HttpPut]
-        [Route("")]
-        public WorkItem UpdateWorkItem(WorkItem workItem)
+        [Route("{workItemId:int}")]
+        public WorkItem UpdateWorkItem(int workItemId, [FromBody]WorkItem workItem)
         {
             try
             {
+                if(workItem == null || workItem.Id != workItemId) throw new Exception("Invalid WorkItem");
                 var newWorkItem = _workItemRepository.Update(workItem);
                 return newWorkItem;
             }
@@ -46,7 +46,7 @@ namespace ProjectaaWebApi.Controllers
             }
         }
 
-        [Route("{statusId:int}/bystatus")]
+        [Route("status/{statusId:int}")]
         public List<WorkItem> GetWorkItemsByStatus(int statusId)
         {
             try
@@ -56,12 +56,12 @@ namespace ProjectaaWebApi.Controllers
             }
             catch (Exception e)
             {
-                throw new ArgumentNullException(e.Message);
+                throw new Exception(e.Message);
             }
 
         }
 
-        [Route("{teamId:int}/byteam")]
+        [Route("team/{teamId:int}")]
         public List<WorkItem> GetWorkItemsByTeam(int teamId)
         {
             try
@@ -71,12 +71,12 @@ namespace ProjectaaWebApi.Controllers
             }
             catch (Exception e)
             {
-                throw new ArgumentNullException(e.Message);
+                throw new Exception(e.Message);
             }
 
         }
 
-        [Route("{userId:int}/byuser")]
+        [Route("user/{userId:int}")]
         public List<WorkItem> GetWorkItemsByUser(int userId)
         {
             try
@@ -86,12 +86,12 @@ namespace ProjectaaWebApi.Controllers
             }
             catch (Exception e)
             {
-                throw new ArgumentNullException(e.Message);
+                throw new Exception(e.Message);
             }
 
         }
 
-        [Route("{text}")]
+        [Route("search/{text}")]
         public List<WorkItem> GetWorkItemsByDescription(string text)
         {
             try
@@ -101,7 +101,7 @@ namespace ProjectaaWebApi.Controllers
             }
             catch (Exception e)
             {
-                throw new ArgumentNullException(e.Message);
+                throw new Exception(e.Message);
             }
 
         }
@@ -116,7 +116,7 @@ namespace ProjectaaWebApi.Controllers
             }
             catch (Exception e)
             {
-                throw new ArgumentNullException(e.Message);
+                throw new Exception(e.Message);
             }
 
         }
