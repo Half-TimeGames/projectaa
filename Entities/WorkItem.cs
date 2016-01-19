@@ -7,7 +7,7 @@ namespace Entities
         public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public DateTime DateCreated { get; set; }
-        public DateTime DateDone { get; set; }
+        public string DateCreated { get; set; }
+        public string DateDone { get; set; }
     }
 }

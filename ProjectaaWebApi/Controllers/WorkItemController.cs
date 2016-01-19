@@ -14,6 +14,16 @@ namespace ProjectaaWebApi.Controllers
         readonly UserRepository _userRepository = new UserRepository();
         readonly TeamRepository _teamRepository = new TeamRepository();
 
+        //skapa workitem
+        //ändra status på workitem
+        //ta bort workitem
+        //tilldela workitem till user
+        //hämta workitem baserat på status
+        //hämta workitems för ett team
+        //hämta workitems för en user
+        //söka efter workitem baserat på description
+        //hämta workitem med status done för en viss period på "datedone"
+
         [HttpPost]
         [Route("")]
         [ResponseType(typeof(WorkItem))]
@@ -32,7 +42,7 @@ namespace ProjectaaWebApi.Controllers
         }
 
         [HttpPut]
-        [Route("")]
+        [Route("{workItemId:int}")]
         public WorkItem UpdateWorkItem(WorkItem workItem)
         {
             try

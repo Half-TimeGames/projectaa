@@ -71,7 +71,7 @@ namespace DataAccess.Repositories
         {
             const string sqlQuery = "INSERT INTO TeamUser (Team_Id, User_Id) " +
                                     "VALUES (@Team_Id, @User_Id) " +
-                                    "SELECT * FROM User " +
+                                    "SELECT * FROM [User] " +
                                     "WHERE Id = @User_Id";
             return _dbConnection.Query<User>(sqlQuery, new { User_Id = userId, Team_Id = teamId }).First();
         }
