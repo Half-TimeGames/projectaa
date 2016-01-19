@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -32,6 +33,12 @@ namespace DataAccess.Repositories
             return _dbConnection.Query<Issue>("SELECT * FROM Issue").ToList();
         }
 
+        public WorkItem GetWorkItem(int id)
+        {
+            return _dbConnection.Query<WorkItem>("SELECT * FROM WorkItems " +
+                                                 "WHERE Issue_Id = @Id", new { id }).Single();
+        }
+
         public void Remove(int id)
         {
             const string sqlQuery = "DELETE FROM Issue " +
@@ -47,5 +54,6 @@ namespace DataAccess.Repositories
             _dbConnection.Execute(sqlQuery, issue);
             return issue;
         }
+
     }
 }
