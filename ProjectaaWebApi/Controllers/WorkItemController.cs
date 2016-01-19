@@ -55,6 +55,20 @@ namespace ProjectaaWebApi.Controllers
                 throw new ArgumentException(e.Message);
             }
         }
+        [HttpGet]
+        [Route("workitems/{pageNumber:int}/{rowsPerPage:int}")]
+        public List<WorkItem> GetAllWorkItems(int pageNumber, int rowsPerPage)
+        {
+            try
+            {
+                var workItem = _workItemRepository.GetAll(pageNumber, rowsPerPage);
+                return workItem;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
 
         [Route("status/{statusId:int}")]
         public List<WorkItem> GetWorkItemsByStatus(int statusId)

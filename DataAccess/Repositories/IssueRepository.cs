@@ -27,9 +27,18 @@ namespace DataAccess.Repositories
                                               "WHERE Id = @Id", new { id }).SingleOrDefault();
         }
 
-        public List<Issue> GetAll()
+        public List<Issue> GetAll(int pageNumber, int rowsPerPage)
         {
-            return _dbConnection.Query<Issue>("SELECT * FROM Issue").ToList();
+            var sqlQuery = "DECLARE @PageNumber AS INT, @RowspPage AS INT " +
+                           "SET @PageNumber = " + pageNumber + " " +
+                           "SET @RowspPage = " + rowsPerPage + " " +
+                           "SELECT* FROM ( " +
+                           "SELECT ROW_NUMBER() OVER(ORDER BY Id) AS NUMBER, " +
+                           "Id, Description FROM Issue" +
+                           ") AS TBL " +
+                           "WHERE NUMBER  BETWEEN((@PageNumber - 1) * @RowspPage + 1)  AND(@PageNumber * @RowspPage)" +
+                           "ORDER BY Id";
+            return _dbConnection.Query<Issue>(sqlQuery).ToList();
         }
 
         public WorkItem GetWorkItem(int id)

@@ -13,9 +13,18 @@ namespace DataAccess.Repositories
     {
         private readonly IDbConnection _dbConnection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["azureConnectionString"].ConnectionString);
 
-        public List<WorkItem> GetAll()
+        public List<WorkItem> GetAll(int pageNumber, int rowsPerPage)
         {
-            return _dbConnection.Query<WorkItem>("SELECT * FROM WorkItem").ToList();
+            var sqlQuery = "DECLARE @PageNumber AS INT, @RowspPage AS INT " +
+                           "SET @PageNumber = " + pageNumber + " " +
+                           "SET @RowspPage = " + rowsPerPage + " " +
+                           "SELECT* FROM ( " +
+                           "SELECT ROW_NUMBER() OVER(ORDER BY Id) AS NUMBER, " +
+                           "Id, Title, Description, DateCreated, DateFinished, Status_Id FROM WorkItem" +
+                           ") AS TBL " +
+                           "WHERE NUMBER  BETWEEN((@PageNumber - 1) * @RowspPage + 1)  AND(@PageNumber * @RowspPage)" +
+                           "ORDER BY Id";
+            return _dbConnection.Query<WorkItem>(sqlQuery).ToList();
         }
 
         public WorkItem Find(int id)

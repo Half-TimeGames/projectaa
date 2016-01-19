@@ -5,7 +5,7 @@ namespace DataAccess.Interfaces
 {
     public interface IIssueRepository
     {
-        List<Issue> GetAll();
+        List<Issue> GetAll(int pageNumber, int rowsPerPage);
         Issue Find(int id);
         Issue Add(Issue issue);
         Issue Update(Issue issue);
