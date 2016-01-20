@@ -93,7 +93,7 @@ namespace DataAccess.Repositories
                            "LastName = @LastName," +
                            "UserName = @UserName" +
                            " WHERE Id = @Id";
-            _dbConnection.Execute(sqlQuery, new {user.FirstName, user.LastName, user.UserName});
+            _dbConnection.Execute(sqlQuery, new {user.FirstName, user.LastName, user.UserName, user.Id});
             return user;
         }
 
