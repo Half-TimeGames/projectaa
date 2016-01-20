@@ -10,11 +10,6 @@ namespace ProjectaaWebApi.Controllers
     [RoutePrefix("api/team")]
     public class TeamController : ApiController
     {
-        //skapa team
-        //uppdatera team
-        //ta bort team
-        //lägga till user till team?
-
         readonly TeamRepository _teamRepository = new TeamRepository();
 
         [HttpGet]
