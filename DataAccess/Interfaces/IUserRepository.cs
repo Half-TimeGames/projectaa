@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using Entities;
+﻿using Entities;
+using System.Collections.Generic;
 
 namespace DataAccess.Interfaces
 {
     public interface IUserRepository
     {
-        List<User> GetAll();
+        List<User> GetAll(int page, int perPage);
         User Find(int id);
         User Add(User user);
         User Update(User user);
@@ -13,5 +13,6 @@ namespace DataAccess.Interfaces
         List<Team> GetTeams(int id);
         List<WorkItem> WorkItems(int id);
         List<User> FindByName(string name);
+        User AddTeamToUser(int userId, int teamId);
     }
 }

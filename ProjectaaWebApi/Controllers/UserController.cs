@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using System.Web.Http.Description;
-using DataAccess.Repositories;
+﻿using DataAccess.Repositories;
 using Entities;
+using System;
+using System.Collections.Generic;
+using System.Web.Http;
 
 namespace ProjectaaWebApi.Controllers
 {
@@ -14,16 +11,30 @@ namespace ProjectaaWebApi.Controllers
     {
         private readonly UserRepository _userRepository = new UserRepository();
 
+        [HttpGet]
+        [Route("users")]
+        public List<User> GetAllUsers()
+        {
+            try
+            {
+                var users = _userRepository.GetAll();
+                return users;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+        }
 
         [HttpGet]
         [Route("users")]
-        [ResponseType(typeof(List<User>))]
-        public IHttpActionResult GetAllUsers()
+        public List<User> GetAllUsers(int page, int perPage)
         {
             try
             {
-                var result = _userRepository.GetAll();
-                return Ok(result);
+                var users = _userRepository.GetAll(page, perPage);
+                return users;
             }
             catch (Exception e)
             {
@@ -32,14 +43,15 @@ namespace ProjectaaWebApi.Controllers
         }
 
         [HttpGet]
-        [Route("{id:int}")]
-        [ResponseType(typeof(User))]
-        public IHttpActionResult GetUserById(int id)
+        [Route("{userId:int}")]
+        public User GetUserById(int userId)
         {
             try
             {
-                var result = _userRepository.Find(id);
-                return Ok(result);
+                var result = _userRepository.Find(userId);
+                result.WorkItems = GetWorkItems(result.Id);
+                result.Teams = GetTeams(result.Id);
+                return result;
             }
             catch (Exception e)
             {
@@ -48,14 +60,13 @@ namespace ProjectaaWebApi.Controllers
         }
 
         [HttpGet]
-        [Route("{name}")]
-        [ResponseType(typeof(List<User>))]
-        public IHttpActionResult GetUsersByName(string name)
+        [Route("search")]
+        public List<User> GetUsersByName(string name)
         {
             try
             {
                 var result = _userRepository.FindByName(name);
-                return Ok(result);
+                return result;
             }
             catch (Exception e)
             {
@@ -64,14 +75,13 @@ namespace ProjectaaWebApi.Controllers
         }
 
         [HttpGet]
-        [Route("{id:int}/teams")]
-        [ResponseType(typeof(List<User>))]
-        public IHttpActionResult GetTeams(int id)
+        [Route("{userId:int}/teams")]
+        public List<Team> GetTeams(int userId)
         {
             try
             {
-                var result = _userRepository.GetTeams(id);
-                return Ok(result);
+                var result = _userRepository.GetTeams(userId);
+                return result;
             }
             catch (Exception e)
             {
@@ -80,31 +90,13 @@ namespace ProjectaaWebApi.Controllers
         }
 
         [HttpGet]
-        [Route("{id:int}/workitems")]
-        [ResponseType(typeof(List<WorkItem>))]
-        public IHttpActionResult GetWorkItems(int id)
+        [Route("{userId:int}/workitems")]
+        public List<WorkItem> GetWorkItems(int userId)
         {
             try
             {
-                var result = _userRepository.WorkItems(id);
-                return Ok(result);
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-        }
-
-        [HttpGet]
-        [Route("{userId:int}/addteam/{teamId:int}")]
-        [ResponseType(typeof(Team))]
-        public IHttpActionResult AddToTeam(int teamId, int userId)
-        {
-            try
-            {
-                var user = _userRepository.AddUserToTeam(userId, teamId);
-                user.Teams = _userRepository.GetTeams(userId);
-                return Ok(user);
+                var result = _userRepository.WorkItems(userId);
+                return result;
             }
             catch (Exception e)
             {
@@ -114,13 +106,12 @@ namespace ProjectaaWebApi.Controllers
 
         [HttpPost]
         [Route("")]
-        [ResponseType(typeof(User))]
-        public IHttpActionResult PostUser(User user)
+        public User PostUser(User user)
         {
             try
             {
                 var newUser = _userRepository.Add(user);
-                return Ok(newUser);
+                return newUser;
             }
             catch (Exception e)
             {
@@ -129,15 +120,30 @@ namespace ProjectaaWebApi.Controllers
         }
 
         [HttpPut]
-        [Route("")]
-        [ResponseType(typeof(User))]
-        public IHttpActionResult PutUser(User user)
+        [Route("{userId:int}/team/{teamId:int}")]
+        public User AddToTeam(int userId, int teamId)
         {
             try
             {
-                if (user == null) return BadRequest("No user");
+                var user = _userRepository.AddTeamToUser(userId, teamId);
+                user.Teams = _userRepository.GetTeams(userId);
+                return user;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        [HttpPut]
+        [Route("{userId:int}")]
+        public User PutUser(int userId, [FromBody] User user)
+        {
+            try
+            {
+                if (user == null || user.Id != userId) throw new Exception("Invalid user");
                 _userRepository.Update(user);
-                return Ok(user);
+                return user;
             }
             catch (Exception e)
             {
@@ -146,16 +152,15 @@ namespace ProjectaaWebApi.Controllers
         }
 
         [HttpDelete]
-        [Route("{id:int}")]
-        [ResponseType(typeof(User))]
-        public IHttpActionResult DeleteUser(int id)
+        [Route("{userId:int}")]
+        public User DeleteUser(int userId)
         {
             try
             {
-                var user = _userRepository.Find(id);
-                if (user == null) return NotFound();
-                _userRepository.Remove(id);
-                return Ok(user);
+                var user = _userRepository.Find(userId);
+                if (user == null) throw new NullReferenceException();
+                _userRepository.Remove(userId);
+                return user;
             }
             catch (Exception e)
             {
