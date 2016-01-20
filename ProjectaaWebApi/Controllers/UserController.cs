@@ -12,14 +12,29 @@ namespace ProjectaaWebApi.Controllers
     {
         private readonly UserRepository _userRepository = new UserRepository();
 
-
         [HttpGet]
-        [Route("users/{pageNumber:int}/{rowsPerPage:int}")]
-        public List<User> GetAllUsers(int pageNumber, int rowsPerPage)
+        [Route("users")]
+        public List<User> GetAllUsers()
         {
             try
             {
-                var users = _userRepository.GetAll(pageNumber, rowsPerPage);
+                var users = _userRepository.GetAll();
+                return users;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+        }
+
+        [HttpGet]
+        [Route("users")]
+        public List<User> GetAllUsers(int page, int perPage)
+        {
+            try
+            {
+                var users = _userRepository.GetAll(page, perPage);
                 return users;
             }
             catch (Exception e)

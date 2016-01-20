@@ -5,7 +5,7 @@ namespace DataAccess.Interfaces
 {
     public interface IUserRepository
     {
-        List<User> GetAll(int pageNumber, int rowsPerPage);
+        List<User> GetAll(int page, int perPage);
         User Find(int id);
         User Add(User user);
         User Update(User user);

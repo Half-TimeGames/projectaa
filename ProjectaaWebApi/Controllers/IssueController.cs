@@ -17,18 +17,34 @@ namespace ProjectaaWebApi.Controllers
         private readonly IssueRepository _issueRepository = new IssueRepository();
 
         [HttpGet]
-        [Route("issues/{pageNumber:int}/{rowsPerPage:int}")]
-        public List<Issue> GetAllIssues(int pageNumber, int rowsPerPage)
+        [Route("issues")]
+        public List<Issue> GetAllIssues(int page, int perPage)
         {
             try
             {
-                var issues = _issueRepository.GetAll(pageNumber, rowsPerPage);
+                var issues = _issueRepository.GetAll(page, perPage);
                 return issues;
             }
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
+        }
+
+        [HttpGet]
+        [Route("issues")]
+        public List<Issue> GetAllIssues()
+        {
+            try
+            {
+                var issues = _issueRepository.GetAll();
+                return issues;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
         }
 
         [HttpGet]

@@ -40,6 +40,8 @@ namespace ProjectaaWebApi.Controllers
             try
             {
                 var team = _teamRepository.Find(teamId);
+                team.Users = GetUsers(team.Id);
+                team.WorkItems = GetWorkItems(team.Id);
                 return team;
             }
             catch (Exception e)
@@ -87,8 +89,8 @@ namespace ProjectaaWebApi.Controllers
         {
             try
             {
-                _teamRepository.Add(team);
-                return team;
+                var newTeam = _teamRepository.Add(team);
+                return newTeam;
             }
             catch (Exception e)
             {
@@ -130,5 +132,23 @@ namespace ProjectaaWebApi.Controllers
                 throw new Exception(e.Message);
             }
         }
+
+        [HttpDelete]
+        [Route("{teamId:int}")]
+        public Team DeleteTeam(int teamId)
+        {
+            try
+            {
+                var team = _teamRepository.Find(teamId);
+                if (team == null) throw new NullReferenceException();
+                _teamRepository.Remove(teamId);
+                return team;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
     }
 }

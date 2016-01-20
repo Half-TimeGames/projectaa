@@ -17,7 +17,7 @@ namespace ProjectaaWebApi.Controllers
         //skapa workitem
         //ändra status på workitem
         //ta bort workitem
-        //tilldela workitem till user
+        //tilldela workitem till user - ANNA
         //hämta workitem baserat på status
         //hämta workitems för ett team
         //hämta workitems för en user
@@ -42,12 +42,13 @@ namespace ProjectaaWebApi.Controllers
 
         [HttpPut]
         [Route("{workItemId:int}")]
-        public WorkItem UpdateWorkItem(int workItemId, [FromBody]WorkItem workItem)
+        public WorkItem UpdateStatus(int workItemId, int statusId)
         {
             try
             {
-                if(workItem == null || workItem.Id != workItemId) throw new Exception("Invalid WorkItem");
-                var newWorkItem = _workItemRepository.Update(workItem);
+                var workItem = _workItemRepository.Find(workItemId);
+                if(workItem == null) throw new Exception("Invalid WorkItem");
+                var newWorkItem = _workItemRepository.UpdateStatus(statusId, workItemId);
                 return newWorkItem;
             }
             catch (Exception e)
@@ -55,13 +56,14 @@ namespace ProjectaaWebApi.Controllers
                 throw new ArgumentException(e.Message);
             }
         }
+        
         [HttpGet]
-        [Route("workitems/{pageNumber:int}/{rowsPerPage:int}")]
-        public List<WorkItem> GetAllWorkItems(int pageNumber, int rowsPerPage)
+        [Route("workitems")]
+        public List<WorkItem> GetAllWorkItems()
         {
             try
             {
-                var workItem = _workItemRepository.GetAll(pageNumber, rowsPerPage);
+                var workItem = _workItemRepository.GetAll();
                 return workItem;
             }
             catch (Exception e)
@@ -70,6 +72,22 @@ namespace ProjectaaWebApi.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("workitems")]
+        public List<WorkItem> GetAllWorkItems(int page, int perPage)
+        {
+            try
+            {
+                var workItem = _workItemRepository.GetAll(page, perPage);
+                return workItem;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        [HttpGet]
         [Route("status/{statusId:int}")]
         public List<WorkItem> GetWorkItemsByStatus(int statusId)
         {
@@ -85,6 +103,7 @@ namespace ProjectaaWebApi.Controllers
 
         }
 
+        [HttpGet]
         [Route("team/{teamId:int}")]
         public List<WorkItem> GetWorkItemsByTeam(int teamId)
         {
@@ -100,6 +119,7 @@ namespace ProjectaaWebApi.Controllers
 
         }
 
+        [HttpGet]
         [Route("user/{userId:int}")]
         public List<WorkItem> GetWorkItemsByUser(int userId)
         {
@@ -115,7 +135,8 @@ namespace ProjectaaWebApi.Controllers
 
         }
 
-        [Route("search/{text}")]
+        [HttpGet]
+        [Route("search/desc")]
         public List<WorkItem> GetWorkItemsByDescription(string text)
         {
             try
@@ -130,6 +151,7 @@ namespace ProjectaaWebApi.Controllers
 
         }
 
+        [HttpGet]
         [Route("issues")]
         public List<WorkItem> GetWorkItemsWithIssue()
         {
@@ -143,6 +165,38 @@ namespace ProjectaaWebApi.Controllers
                 throw new Exception(e.Message);
             }
 
+        }
+
+        [HttpGet]
+        [Route("search/done/date")]
+        public List<WorkItem> HistoricSearch(DateTime from, DateTime to)
+        {
+            try
+            {
+                var result = _workItemRepository.FindByDate(from, to);
+                return result;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        [HttpDelete]
+        [Route("{workItemId:int}")]
+        public WorkItem DeleteWorkItem(int workItemId)
+        {
+            try
+            {
+                var workItem = _workItemRepository.Find(workItemId);
+                if (workItem == null) throw new NullReferenceException();
+                _workItemRepository.Remove(workItemId);
+                return workItem;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
     }
 }

@@ -15,7 +15,8 @@ namespace DataAccess.Repositories
         public Issue Add(Issue issue)
         {
             const string sqlQuery = "INSERT INTO Issue (Description) " +
-                           "VALUES (@Description)";
+                           "VALUES (@Description)" +
+                           "SELECT Id FROM Issue WHERE Id = scope_identity()";
             var issueId = _dbConnection.Query<int>(sqlQuery, issue).Single();
             issue.Id = issueId;
             return issue;
@@ -27,11 +28,16 @@ namespace DataAccess.Repositories
                                               "WHERE Id = @Id", new { id }).SingleOrDefault();
         }
 
-        public List<Issue> GetAll(int pageNumber, int rowsPerPage)
+        public List<Issue> GetAll()
+        {
+            return _dbConnection.Query<Issue>("SELECT * FROM Issue").ToList();
+        }
+
+        public List<Issue> GetAll(int page, int perPage)
         {
             var sqlQuery = "DECLARE @PageNumber AS INT, @RowspPage AS INT " +
-                           "SET @PageNumber = " + pageNumber + " " +
-                           "SET @RowspPage = " + rowsPerPage + " " +
+                           "SET @PageNumber = " + page + " " +
+                           "SET @RowspPage = " + perPage + " " +
                            "SELECT* FROM ( " +
                            "SELECT ROW_NUMBER() OVER(ORDER BY Id) AS NUMBER, " +
                            "Id, Description FROM Issue" +
