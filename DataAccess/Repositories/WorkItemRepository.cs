@@ -71,10 +71,20 @@ namespace DataAccess.Repositories
         {
             const string sqlQuery = "UPDATE WorkItem " +
                                  "SET " +
-                                 "User_Id = @userId " +
-                                 "WHERE Id = @workItemId " +
-                                 "SELECT * FROM WorkItem WHERE Id = workItemId";
-            return _dbConnection.Query<WorkItem>(sqlQuery, new { userId, workItemId }).Single();
+                                 "User_Id = @UserId " +
+                                 "WHERE Id = @WorkItemId " +
+                                 "SELECT * FROM WorkItem WHERE Id = @WorkItemId";
+            return _dbConnection.Query<WorkItem>(sqlQuery, new {UserId = userId, WorkItemId = workItemId}).Single();
+        }
+
+        public WorkItem ChangeStatus(int statusId, int workItemId)
+        {
+            const string sqlQuery = "UPDATE WorkItem " +
+                                    "SET " +
+                                    "Status_id = @StatusId " +
+                                    "WHERE Id = @WorkItemId " +
+                                    "SELECT * FROM WorkItem WHERE Id = @WorkItemId";
+            return _dbConnection.Query<WorkItem>(sqlQuery, new {StatusId = statusId, WorkItemId = workItemId}).Single();
         }
 
         public List<WorkItem> FindByDescription(string text)
