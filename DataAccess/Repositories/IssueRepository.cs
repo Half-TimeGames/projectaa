@@ -1,25 +1,22 @@
-﻿using System;
+﻿using Dapper;
+using DataAccess.Interfaces;
+using Entities;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Dapper;
-using DataAccess.Interfaces;
-using Entities;
 
 namespace DataAccess.Repositories
 {
     public class IssueRepository : IIssueRepository
     {
-        private readonly IDbConnection _dbConnection = new SqlConnection("Server=tcp:projectaa.database.windows.net,1433;Database=projactaa_db;User ID=andreas.dellrud@projectaa;Password=TeAnAn2016;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-        //private readonly IDbConnection _dbConnection = new SqlConnection("Data Source=LENOVO-PC\\SQLEXPRESS;Initial Catalog=Projectaa_Db;Integrated Security=True");
+        private readonly IDbConnection _dbConnection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["azureConnectionString"].ConnectionString);
 
         public Issue Add(Issue issue)
         {
-            var sqlQuery = "INSERT INTO Issue (Description) " +
-                           "VALUES (@Description)";
+            const string sqlQuery = "INSERT INTO Issue (Description) " +
+                           "VALUES (@Description)" +
+                           "SELECT Id FROM Issue WHERE Id = scope_identity()";
             var issueId = _dbConnection.Query<int>(sqlQuery, issue).Single();
             issue.Id = issueId;
             return issue;
@@ -34,6 +31,26 @@ namespace DataAccess.Repositories
         public List<Issue> GetAll()
         {
             return _dbConnection.Query<Issue>("SELECT * FROM Issue").ToList();
+        }
+
+        public List<Issue> GetAll(int page, int perPage)
+        {
+            var sqlQuery = "DECLARE @PageNumber AS INT, @RowspPage AS INT " +
+                           "SET @PageNumber = " + page + " " +
+                           "SET @RowspPage = " + perPage + " " +
+                           "SELECT* FROM ( " +
+                           "SELECT ROW_NUMBER() OVER(ORDER BY Id) AS NUMBER, " +
+                           "Id, Description FROM Issue" +
+                           ") AS TBL " +
+                           "WHERE NUMBER  BETWEEN((@PageNumber - 1) * @RowspPage + 1)  AND(@PageNumber * @RowspPage)" +
+                           "ORDER BY Id";
+            return _dbConnection.Query<Issue>(sqlQuery).ToList();
+        }
+
+        public WorkItem GetWorkItem(int id)
+        {
+            return _dbConnection.Query<WorkItem>("SELECT * FROM WorkItems " +
+                                                 "WHERE Issue_Id = @Id", new { id }).Single();
         }
 
         public void Remove(int id)
@@ -51,5 +68,6 @@ namespace DataAccess.Repositories
             _dbConnection.Execute(sqlQuery, issue);
             return issue;
         }
+
     }
 }

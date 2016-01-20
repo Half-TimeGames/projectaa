@@ -1,25 +1,24 @@
-﻿using System;
+﻿using Dapper;
+using DataAccess.Interfaces;
+using Entities;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using Dapper;
-using DataAccess.Interfaces;
-using Entities;
 
 namespace DataAccess.Repositories
 {
     public class TeamRepository : ITeamRepository
     {
-        private readonly IDbConnection _dbConnection = new SqlConnection("Server=tcp:projectaa.database.windows.net,1433;Database=projactaa_db;User ID=andreas.dellrud@projectaa;Password=TeAnAn2016;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-        //private readonly IDbConnection _dbConnection = new SqlConnection("Data Source=LENOVO-PC\\SQLEXPRESS;Initial Catalog=Projectaa_Db;Integrated Security=True");
+        private readonly IDbConnection _dbConnection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["azureConnectionString"].ConnectionString);
 
         public Team Add(Team team)
         {
             const string sqlQuery = "INSERT INTO Team (Name) " +
-                                    "VALUES (@Name)";
-            var teamId = _dbConnection.Query(sqlQuery, team).Single();
-            team.Id = teamId;
+                                    "VALUES (@Name) " +
+                                    "SELECT Id FROM Team WHERE Id = scope_identity()";
+            var teamId = _dbConnection.Query(sqlQuery, new { team.Name}).Single();
+            team.Id = teamId.Id;
             return team;
         }
 
@@ -52,7 +51,7 @@ namespace DataAccess.Repositories
 
         public void Remove(int id)
         {
-            _dbConnection.Query("DELETE * FROM Team " +
+            _dbConnection.Query("DELETE FROM Team " +
                                 "WHERE Id = @TeamId", new { TeamId = id });
         }
 
@@ -61,8 +60,17 @@ namespace DataAccess.Repositories
             const string sqlQuery = "UPDATE Team " +
                                     "SET Name = @Name " +
                                     "WHERE Id = @Id";
-            _dbConnection.Execute(sqlQuery);
+            _dbConnection.Execute(sqlQuery, team);
             return team;
+        }
+
+        public Team AddUserToTeam(int userId, int teamId)
+        {
+            const string sqlQuery = "INSERT INTO TeamUser (Team_Id, User_Id) " +
+                                    "VALUES (@Team_Id, @User_Id) " +
+                                    "SELECT * FROM Team " +
+                                    "WHERE Id = @Team_Id";
+            return _dbConnection.Query<Team>(sqlQuery, new { User_Id = userId, Team_Id = teamId }).First();
         }
     }
 }

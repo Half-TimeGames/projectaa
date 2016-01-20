@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Entities;
+﻿using Entities;
+using System.Collections.Generic;
 
 namespace DataAccess.Interfaces
 {
@@ -12,5 +12,6 @@ namespace DataAccess.Interfaces
         void Remove(int id);
         List<User> GetUsers(int id);
         List<WorkItem> GetWorkItems(int id);
+        Team AddUserToTeam(int teamId, int userId);
     }
 }

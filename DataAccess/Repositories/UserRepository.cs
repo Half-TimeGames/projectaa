@@ -1,21 +1,20 @@
+using Dapper;
+using DataAccess.Interfaces;
+using Entities;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using Dapper;
-using DataAccess.Interfaces;
-using Entities;
 
 namespace DataAccess.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private readonly IDbConnection _dbConnection = new SqlConnection("Server=tcp:projectaa.database.windows.net,1433;Database=projactaa_db;User ID=andreas.dellrud@projectaa;Password=TeAnAn2016;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-        //private readonly IDbConnection _dbConnection = new SqlConnection("Data Source=LENOVO-PC\\SQLEXPRESS;Initial Catalog=Projectaa_Db;Integrated Security=True");
+        private readonly IDbConnection _dbConnection = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["azureConnectionString"].ConnectionString);
 
         public User Add(User user)
         {
-            var sqlQuery = "INSERT INTO [User] (FirstName, LastName, UserName) " +
+            const string sqlQuery = "INSERT INTO [User] (FirstName, LastName, UserName) " +
                            "VALUES (@" +
                            "FirstName, @LastName, @UserName)"+
                            "SELECT Id FROM [User] WHERE Id = scope_identity()";
@@ -48,11 +47,26 @@ namespace DataAccess.Repositories
         public List<User> GetAll()
         {
             return _dbConnection.Query<User>("SELECT * FROM [User]").ToList();
+        } 
+
+        public List<User> GetAll(int page, int perPage)
+        {
+            var sqlQuery = "DECLARE @PageNumber AS INT, @RowspPage AS INT " +
+                           "SET @PageNumber = " + page + " " +
+                           "SET @RowspPage = " + perPage + " " +
+                           "SELECT* FROM ( " +
+                           "SELECT ROW_NUMBER() OVER(ORDER BY Id) AS NUMBER, " +
+                           "Id, FirstName, LastName, UserName FROM [User]" +
+                           ") AS TBL " +
+                           "WHERE NUMBER  BETWEEN((@PageNumber - 1) * @RowspPage + 1)  AND(@PageNumber * @RowspPage)" +
+                           "ORDER BY Id";
+
+            return _dbConnection.Query<User>(sqlQuery).ToList();
         }
 
         public List<Team> GetTeams(int id)
         {
-            var sqlQuery = "SELECT Team_Id FROM TeamUser " +
+            const string sqlQuery = "SELECT Team_Id FROM TeamUser " +
                            "WHERE User_Id = @UserId";
             var teamIdList = _dbConnection.Query<int>(sqlQuery, new { UserId = id }).ToList();
 
@@ -62,20 +76,29 @@ namespace DataAccess.Repositories
 
         public void Remove(int id)
         {
-            var sqlQuery = "DELETE FROM [User] " +
+            const string sqlQuery = "DELETE FROM [User] " +
                            "WHERE Id = @Id";
             _dbConnection.Execute(sqlQuery, new { id });
         }
 
+        public User AddTeamToUser(int userId, int teamId)
+        {
+            const string sqlQuery = "INSERT INTO TeamUser (Team_Id, User_Id) " +
+                                    "VALUES (@Team_Id, @User_Id) " +
+                                    "SELECT * FROM [User] " +
+                                    "WHERE Id = @User_Id";
+            return _dbConnection.Query<User>(sqlQuery, new { User_Id = userId, Team_Id = teamId }).First();
+        }
+
         public User Update(User user)
         {
-            var sqlQuery = "UPDATE [User] " +
+            const string sqlQuery = "UPDATE [User] " +
                            "SET " +
                            "FirstName = @FirstName," +
                            "LastName = @LastName," +
                            "UserName = @UserName" +
                            " WHERE Id = @Id";
-            _dbConnection.Execute(sqlQuery, new {user.FirstName, user.LastName, user.UserName});
+            _dbConnection.Execute(sqlQuery, new {user.FirstName, user.LastName, user.UserName, user.Id});
             return user;
         }
 
