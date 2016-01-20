@@ -13,15 +13,141 @@ namespace ProjectaaWebApi.Controllers
         readonly UserRepository _userRepository = new UserRepository();
         readonly TeamRepository _teamRepository = new TeamRepository();
 
-        //skapa workitem
-        //ändra status på workitem
-        //ta bort workitem
-        //tilldela workitem till user - ANNA
-        //hämta workitem baserat på status
-        //hämta workitems för ett team
-        //hämta workitems för en user
-        //söka efter workitem baserat på description
-        //hämta workitem med status done för en viss period på "datedone"
+        [HttpGet]
+        [Route("workitems")]
+        public List<WorkItem> GetAllWorkItems()
+        {
+            try
+            {
+                var workItems = _workItemRepository.GetAll();
+                return workItems;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("workitems")]
+        public List<WorkItem> GetAllWorkItems(int page, int perPage)
+        {
+            try
+            {
+                var workItems = _workItemRepository.GetAll(page, perPage);
+                return workItems;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("{workitemid:int}")]
+        public WorkItem GetWorkItem(int workItemId)
+        {
+            try
+            {
+                var workItem = _workItemRepository.Find(workItemId);
+                return workItem;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("status/{statusId:int}")]
+        public List<WorkItem> GetWorkItemsByStatus(int statusId)
+        {
+            try
+            {
+                var workItems = _workItemRepository.FindByStatus(statusId);
+                return workItems;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("team/{teamId:int}")]
+        public List<WorkItem> GetWorkItemsByTeam(int teamId)
+        {
+            try
+            {
+                var workItems = _teamRepository.GetWorkItems(teamId);
+                return workItems;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("user/{userId:int}")]
+        public List<WorkItem> GetWorkItemsByUser(int userId)
+        {
+            try
+            {
+                var workItems = _userRepository.WorkItems(userId);
+                return workItems;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("search/desc")]
+        public List<WorkItem> GetWorkItemsByDescription(string text)
+        {
+            try
+            {
+                var workItems = _workItemRepository.FindByDescription(text);
+                return workItems;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("issues")]
+        public List<WorkItem> GetWorkItemsWithIssue()
+        {
+            try
+            {
+                var workItems = _workItemRepository.FindIfIssue();
+                return workItems;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+        }
+
+        [HttpGet]
+        [Route("search/done/date")]
+        public List<WorkItem> HistoricSearch(DateTime from, DateTime to)
+        {
+            try
+            {
+                var workItems = _workItemRepository.FindByDate(from, to);
+                return workItems;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
 
         [HttpPost]
         [Route("")]
@@ -55,128 +181,22 @@ namespace ProjectaaWebApi.Controllers
                 throw new ArgumentException(e.Message);
             }
         }
+
+        [HttpPut]
+        [Route("{workItemId:int}/user/{userId:int}")]
+        public WorkItem AddWorkItemToUser(int workItemId, int userId)
+        {
+            try
+            {
+                var workItem = _workItemRepository.AddUserToWorkItem(userId, workItemId);
+                return workItem;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
         
-        [HttpGet]
-        [Route("workitems")]
-        public List<WorkItem> GetAllWorkItems()
-        {
-            try
-            {
-                var workItem = _workItemRepository.GetAll();
-                return workItem;
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-        }
-
-        [HttpGet]
-        [Route("workitems")]
-        public List<WorkItem> GetAllWorkItems(int page, int perPage)
-        {
-            try
-            {
-                var workItem = _workItemRepository.GetAll(page, perPage);
-                return workItem;
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-        }
-
-        [HttpGet]
-        [Route("status/{statusId:int}")]
-        public List<WorkItem> GetWorkItemsByStatus(int statusId)
-        {
-            try
-            {
-                var result = _workItemRepository.FindByStatus(statusId);
-                return result;
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-        }
-
-        [HttpGet]
-        [Route("team/{teamId:int}")]
-        public List<WorkItem> GetWorkItemsByTeam(int teamId)
-        {
-            try
-            {
-                var result = _teamRepository.GetWorkItems(teamId);
-                return result;
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-        }
-
-        [HttpGet]
-        [Route("user/{userId:int}")]
-        public List<WorkItem> GetWorkItemsByUser(int userId)
-        {
-            try
-            {
-                var result = _userRepository.WorkItems(userId);
-                return result;
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-        }
-
-        [HttpGet]
-        [Route("search/desc")]
-        public List<WorkItem> GetWorkItemsByDescription(string text)
-        {
-            try
-            {
-                var result = _workItemRepository.FindByDescription(text);
-                return result;
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-        }
-
-        [HttpGet]
-        [Route("issues")]
-        public List<WorkItem> GetWorkItemsWithIssue()
-        {
-            try
-            {
-                var result = _workItemRepository.FindIfIssue();
-                return result;
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-
-        }
-
-        [HttpGet]
-        [Route("search/done/date")]
-        public List<WorkItem> HistoricSearch(DateTime from, DateTime to)
-        {
-            try
-            {
-                var result = _workItemRepository.FindByDate(from, to);
-                return result;
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-        }
-
         [HttpDelete]
         [Route("{workItemId:int}")]
         public WorkItem DeleteWorkItem(int workItemId)
