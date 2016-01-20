@@ -34,16 +34,30 @@ namespace DataAccess.Repositories
                                              "WHERE Id = @Id", new { id }).SingleOrDefault();
         }
 
-        public List<User> FindByName(string name)
+        public List<User> FindByName(string firstName = null, string lastName = null, string userName = null)
         {
-            return
-                _dbConnection.QueryWithRetry<User>("Declare @Name varchar(100);" +
-                                            "Set @Name = '%" + name + "%';" +
-                                            "SET @Name = '%" + name + "%';" +
-                                            "SELECT * FROM [User] " +
-                                            "WHERE (FirstName LIKE @Name) or " +
-                                            "(LastName LIKE @Name) or " +
-                                            "(UserName LIKE @Name)").ToList();
+            if (firstName != null)
+            {
+                return _dbConnection.QueryWithRetry<User>("Declare @Name varchar(100);" +
+                                "SET @Name = '%" + firstName + "%';" +
+                                "SET @Name = '%" + firstName + "%';" +
+                                "SELECT * FROM [User] " +
+                                "WHERE (FirstName LIKE @Name)").ToList();
+            }
+            if (lastName != null)
+            {
+                return _dbConnection.QueryWithRetry<User>("Declare @Name varchar(100);" +
+                                "Set @Name = '%" + lastName + "%';" +
+                                "SET @Name = '%" + lastName + "%';" +
+                                "SELECT * FROM [User] " +
+                                "WHERE (LastName LIKE @Name)").ToList();
+            }
+
+            return _dbConnection.QueryWithRetry<User>("Declare @Name varchar(100);" +
+                                "Set @Name = '%" + userName + "%';" +
+                                "SET @Name = '%" + userName + "%';" +
+                                "SELECT * FROM [User] " +
+                                "WHERE (UserName LIKE @Name)").ToList();
         }
 
         public List<User> GetAll()
@@ -82,7 +96,6 @@ namespace DataAccess.Repositories
                            "WHERE Id = @Id";
             _dbConnection.QueryWithRetry<User>(sqlQuery, new { id });
         }
-
         public User AddTeamToUser(int userId, int teamId)
         {
             const string sqlQuery = "INSERT INTO TeamUser (Team_Id, User_Id) " +

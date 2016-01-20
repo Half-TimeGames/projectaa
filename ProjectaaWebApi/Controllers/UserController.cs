@@ -61,11 +61,11 @@ namespace ProjectaaWebApi.Controllers
 
         [HttpGet]
         [Route("search")]
-        public List<User> GetUsersByName(string name)
+        public List<User> GetUsersByName(string firstName = null, string lastName = null, string userName = null )
         {
             try
             {
-                var result = _userRepository.FindByName(name);
+                var result = _userRepository.FindByName(firstName, lastName, userName);
                 return result;
             }
             catch (Exception e)

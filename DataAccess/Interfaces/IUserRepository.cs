@@ -12,7 +12,7 @@ namespace DataAccess.Interfaces
         void Remove(int id);
         List<Team> GetTeams(int id);
         List<WorkItem> WorkItems(int id);
-        List<User> FindByName(string name);
+        List<User> FindByName(string firstName = null, string lastName = null, string userName = null);
         User AddTeamToUser(int userId, int teamId);
     }
 }
