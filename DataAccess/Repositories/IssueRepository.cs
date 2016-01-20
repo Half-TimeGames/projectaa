@@ -15,8 +15,8 @@ namespace DataAccess.Repositories
         public Issue Add(Issue issue)
         {
             const string sqlQuery = "INSERT INTO Issue (Description) " +
-                           "VALUES (@Description)" +
-                           "SELECT Id FROM Issue WHERE Id = scope_identity()";
+                                    "VALUES (@Description)" +
+                                    "SELECT Id FROM Issue WHERE Id = scope_identity()";
             var issueId = _dbConnection.Query<int>(sqlQuery, issue).Single();
             issue.Id = issueId;
             return issue;

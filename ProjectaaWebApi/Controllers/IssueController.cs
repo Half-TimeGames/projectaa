@@ -11,6 +11,7 @@ namespace ProjectaaWebApi.Controllers
     public class IssueController : ApiController
     {
         private readonly IssueRepository _issueRepository = new IssueRepository();
+        private readonly WorkItemRepository _workItemRepository = new WorkItemRepository();
 
         [HttpGet]
         [Route("issues")]
@@ -19,6 +20,7 @@ namespace ProjectaaWebApi.Controllers
             try
             {
                 var issues = _issueRepository.GetAll(page, perPage);
+                issues.ForEach(x=>x.WorkItem = _workItemRepository.FindByIssue(x.Id));
                 return issues;
             }
             catch (Exception e)
@@ -34,6 +36,7 @@ namespace ProjectaaWebApi.Controllers
             try
             {
                 var issues = _issueRepository.GetAll();
+                issues.ForEach(x => x.WorkItem = _workItemRepository.FindByIssue(x.Id));
                 return issues;
             }
             catch (Exception e)
@@ -76,12 +79,13 @@ namespace ProjectaaWebApi.Controllers
 
         [HttpPost]
         [Route("")]
-        public Issue PostIssue(Issue issue)
+        public Issue PostIssue([FromBody]Issue issue, int workItemId)
         {
             try
             {
-                _issueRepository.Add(issue);
-                return issue;
+                var newIssue = _issueRepository.Add(issue);
+                newIssue.WorkItem = _workItemRepository.AddIssue(newIssue.Id, workItemId);
+                return newIssue;
             }
             catch(Exception e)
             {
@@ -104,5 +108,23 @@ namespace ProjectaaWebApi.Controllers
                 throw new Exception(e.Message);
             }
         }
+
+        [HttpDelete]
+        [Route("{issueId:int}")]
+        public Issue DeleteIssue(int issueId)
+        {
+            try
+            {
+                var issue = _issueRepository.Find(issueId);
+                if (issue == null) throw new NullReferenceException();
+                _issueRepository.Remove(issueId);
+                return issue;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
     }
 }

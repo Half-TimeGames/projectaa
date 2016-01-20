@@ -9,7 +9,7 @@ namespace DataAccess.Interfaces
         List<WorkItem> GetAll(int page, int perPage);
         WorkItem Find(int id);
         WorkItem Add(WorkItem workItem);
-        WorkItem Update(WorkItem workItem);
+        WorkItem AddIssue(int issueId, int workItemId);
         WorkItem UpdateStatus(int statusId, int workItemId);
         void Remove(int id);
         List<WorkItem> FindByDescription(string text);
