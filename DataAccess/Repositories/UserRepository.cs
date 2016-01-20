@@ -15,9 +15,9 @@ namespace DataAccess.Repositories
         public User Add(User user)
         {
             const string sqlQuery = "INSERT INTO [User] (FirstName, LastName, UserName) " +
-                           "VALUES (@" +
-                           "FirstName, @LastName, @UserName)"+
-                           "SELECT Id FROM [User] WHERE Id = scope_identity()";
+                                    "VALUES (@" +
+                                    "FirstName, @LastName, @UserName)"+
+                                    "SELECT Id FROM [User] WHERE Id = scope_identity()";
             if (user == null) return null;
             var userId = _dbConnection.Query(sqlQuery, new {user.FirstName, user.LastName, user.UserName}).First();
                 
@@ -62,7 +62,7 @@ namespace DataAccess.Repositories
         public List<Team> GetTeams(int id)
         {
             const string sqlQuery = "SELECT Team_Id FROM TeamUser " +
-                           "WHERE User_Id = @UserId";
+                                    "WHERE User_Id = @UserId";
             var teamIdList = _dbConnection.Query<int>(sqlQuery, new { UserId = id }).ToList();
 
             return teamIdList.Select(i => _dbConnection.Query<Team>("SELECT * FROM Team " +
@@ -72,7 +72,7 @@ namespace DataAccess.Repositories
         public void Remove(int id)
         {
             const string sqlQuery = "DELETE FROM [User] " +
-                           "WHERE Id = @Id";
+                                    "WHERE Id = @Id";
             _dbConnection.Execute(sqlQuery, new { id });
         }
 
@@ -88,11 +88,11 @@ namespace DataAccess.Repositories
         public User Update(User user)
         {
             const string sqlQuery = "UPDATE [User] " +
-                           "SET " +
-                           "FirstName = @FirstName," +
-                           "LastName = @LastName," +
-                           "UserName = @UserName" +
-                           " WHERE Id = @Id";
+                                    "SET " +
+                                    "FirstName = @FirstName," +
+                                    "LastName = @LastName," +
+                                    "UserName = @UserName" +
+                                    " WHERE Id = @Id";
             _dbConnection.Execute(sqlQuery, new {user.FirstName, user.LastName, user.UserName, user.Id});
             return user;
         }
