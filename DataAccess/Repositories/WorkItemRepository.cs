@@ -50,20 +50,6 @@ namespace DataAccess.Repositories
             return workItem;
         }
 
-        public WorkItem Update(WorkItem workItem)
-        {
-            const string sqlQuery = "UPDATE WorkItem " +
-                           "SET " +
-                           "Title = @Title," +
-                           "Description = @Description," +
-                           "Issue_Id = @IssueId," +
-                           "Team_Id = @TeamId," +
-                           "User_Id = @UserId" +
-                           " WHERE Id = @Id";
-            _dbConnection.Execute(sqlQuery, workItem);
-            return workItem;
-        }
-
         public void Remove(int id)
         {
             const string sqlQuery = "DELETE FROM WorkItem " +
@@ -81,14 +67,14 @@ namespace DataAccess.Repositories
             return _dbConnection.Query<WorkItem>(sqlQuery, new {UserId = userId, WorkItemId = workItemId}).Single();
         }
 
-        public WorkItem ChangeStatus(int statusId, int workItemId)
+        public WorkItem AddIssue(int issueId, int workItemId)
         {
             const string sqlQuery = "UPDATE WorkItem " +
                                     "SET " +
-                                    "Status_id = @StatusId " +
+                                    "Issue_id = @IssueId " +
                                     "WHERE Id = @WorkItemId " +
                                     "SELECT * FROM WorkItem WHERE Id = @WorkItemId";
-            return _dbConnection.Query<WorkItem>(sqlQuery, new {StatusId = statusId, WorkItemId = workItemId}).Single();
+            return _dbConnection.Query<WorkItem>(sqlQuery, new {IssueId = issueId, WorkItemId = workItemId}).Single();
         }
 
         public List<WorkItem> FindByDescription(string text)
@@ -126,6 +112,8 @@ namespace DataAccess.Repositories
             return _dbConnection.Query<WorkItem>(sqlQuery).ToList();
         }
 
+
+
         public WorkItem UpdateStatus(int statusId, int workItemId)
         {
             DateTime? time;
@@ -146,6 +134,13 @@ namespace DataAccess.Repositories
                                    " SELECT * FROM WorkItem " +
                                    " WHERE Id = @workItemId";
             return _dbConnection.Query<WorkItem>(sqlQuery, new { statusId, time, workItemId }).First();
+        }
+
+        public WorkItem FindByIssue(int issueId)
+        {
+            var sqlQuery = "SELECT * FROM WorkItem " +
+               "WHERE Issue_Id = @IssueId";
+            return _dbConnection.Query<WorkItem>(sqlQuery, new { IssueId = issueId }).Single();
         }
     }
 }
