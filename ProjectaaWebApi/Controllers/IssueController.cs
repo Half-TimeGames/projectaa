@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using DataAccess.Repositories;
 using System.Web.Http.Description;
@@ -18,6 +14,21 @@ namespace ProjectaaWebApi.Controllers
 
         [HttpGet]
         [Route("issues")]
+        public List<Issue> GetAllIssues(int page, int perPage)
+        {
+            try
+            {
+                var issues = _issueRepository.GetAll(page, perPage);
+                return issues;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("issues")]
         public List<Issue> GetAllIssues()
         {
             try
@@ -29,6 +40,7 @@ namespace ProjectaaWebApi.Controllers
             {
                 throw new Exception(e.Message);
             }
+
         }
 
         [HttpGet]
@@ -46,7 +58,6 @@ namespace ProjectaaWebApi.Controllers
                 throw new Exception(e.Message);
             }
         }
-
 
         [HttpGet]
         [Route("{issueId:int}/workitem")]

@@ -15,9 +15,10 @@ namespace DataAccess.Repositories
         public Team Add(Team team)
         {
             const string sqlQuery = "INSERT INTO Team (Name) " +
-                                    "VALUES (@Name)";
-            var teamId = _dbConnection.Query(sqlQuery, team).Single();
-            team.Id = teamId;
+                                    "VALUES (@Name) " +
+                                    "SELECT Id FROM Team WHERE Id = scope_identity()";
+            var teamId = _dbConnection.Query(sqlQuery, new { team.Name}).Single();
+            team.Id = teamId.Id;
             return team;
         }
 
@@ -50,7 +51,7 @@ namespace DataAccess.Repositories
 
         public void Remove(int id)
         {
-            _dbConnection.Query("DELETE * FROM Team " +
+            _dbConnection.Query("DELETE FROM Team " +
                                 "WHERE Id = @TeamId", new { TeamId = id });
         }
 
@@ -59,7 +60,7 @@ namespace DataAccess.Repositories
             const string sqlQuery = "UPDATE Team " +
                                     "SET Name = @Name " +
                                     "WHERE Id = @Id";
-            _dbConnection.Execute(sqlQuery);
+            _dbConnection.Execute(sqlQuery, team);
             return team;
         }
 

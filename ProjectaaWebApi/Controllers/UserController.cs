@@ -3,7 +3,6 @@ using Entities;
 using System;
 using System.Collections.Generic;
 using System.Web.Http;
-using System.Web.Http.Description;
 
 namespace ProjectaaWebApi.Controllers
 {
@@ -12,6 +11,21 @@ namespace ProjectaaWebApi.Controllers
     {
         private readonly UserRepository _userRepository = new UserRepository();
 
+        [HttpGet]
+        [Route("users")]
+        public List<User> GetAllUsers()
+        {
+            try
+            {
+                var users = _userRepository.GetAll();
+                return users;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+        }
 
         [HttpGet]
         [Route("users")]
