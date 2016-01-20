@@ -44,11 +44,16 @@ namespace DataAccess.Repositories
                                             "(UserName LIKE @Name)").ToList();
         }
 
-        public List<User> GetAll(int pageNumber, int rowsPerPage)
+        public List<User> GetAll()
+        {
+            return _dbConnection.Query<User>("SELECT * FROM [User]").ToList();
+        } 
+
+        public List<User> GetAll(int page, int perPage)
         {
             var sqlQuery = "DECLARE @PageNumber AS INT, @RowspPage AS INT " +
-                           "SET @PageNumber = " + pageNumber + " " +
-                           "SET @RowspPage = " + rowsPerPage + " " +
+                           "SET @PageNumber = " + page + " " +
+                           "SET @RowspPage = " + perPage + " " +
                            "SELECT* FROM ( " +
                            "SELECT ROW_NUMBER() OVER(ORDER BY Id) AS NUMBER, " +
                            "Id, FirstName, LastName, UserName FROM [User]" +
