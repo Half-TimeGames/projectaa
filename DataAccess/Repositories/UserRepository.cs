@@ -1,12 +1,8 @@
-using System;
-using Dapper;
 using DataAccess.Interfaces;
 using Entities;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 
 namespace DataAccess.Repositories
 {
@@ -40,21 +36,18 @@ namespace DataAccess.Repositories
             {
                 return _dbConnection.QueryWithRetry<User>("Declare @Name varchar(100);" +
                                 "SET @Name = '%" + firstName + "%';" +
-                                "SET @Name = '%" + firstName + "%';" +
                                 "SELECT * FROM [User] " +
                                 "WHERE (FirstName LIKE @Name)").ToList();
             }
             if (lastName != null)
             {
                 return _dbConnection.QueryWithRetry<User>("Declare @Name varchar(100);" +
-                                "Set @Name = '%" + lastName + "%';" +
                                 "SET @Name = '%" + lastName + "%';" +
                                 "SELECT * FROM [User] " +
                                 "WHERE (LastName LIKE @Name)").ToList();
             }
 
             return _dbConnection.QueryWithRetry<User>("Declare @Name varchar(100);" +
-                                "Set @Name = '%" + userName + "%';" +
                                 "SET @Name = '%" + userName + "%';" +
                                 "SELECT * FROM [User] " +
                                 "WHERE (UserName LIKE @Name)").ToList();
