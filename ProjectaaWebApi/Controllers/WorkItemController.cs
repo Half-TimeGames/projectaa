@@ -3,7 +3,6 @@ using Entities;
 using System;
 using System.Collections.Generic;
 using System.Web.Http;
-using System.Web.Http.Description;
 
 namespace ProjectaaWebApi.Controllers
 {
@@ -100,7 +99,6 @@ namespace ProjectaaWebApi.Controllers
             {
                 throw new Exception(e.Message);
             }
-
         }
 
         [HttpGet]
@@ -116,7 +114,6 @@ namespace ProjectaaWebApi.Controllers
             {
                 throw new Exception(e.Message);
             }
-
         }
 
         [HttpGet]
@@ -132,7 +129,6 @@ namespace ProjectaaWebApi.Controllers
             {
                 throw new Exception(e.Message);
             }
-
         }
 
         [HttpGet]
@@ -148,7 +144,6 @@ namespace ProjectaaWebApi.Controllers
             {
                 throw new Exception(e.Message);
             }
-
         }
 
         [HttpGet]

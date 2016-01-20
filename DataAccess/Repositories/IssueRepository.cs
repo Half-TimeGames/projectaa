@@ -55,14 +55,14 @@ namespace DataAccess.Repositories
 
         public void Remove(int id)
         {
-            const string sqlQuery = "DELETE FROM Issue " +
+            var sqlQuery = "DELETE FROM Issue " +
                            "WHERE Id = @Id";
             _dbConnection.Execute(sqlQuery, new { id });
         }
 
         public Issue Update(Issue issue)
         {
-            const string sqlQuery = "UPDATE Issue SET " +
+            var sqlQuery = "UPDATE Issue SET " +
                            "Description = @Description " +
                            "WHERE Id = @Id";
             _dbConnection.Execute(sqlQuery, issue);
