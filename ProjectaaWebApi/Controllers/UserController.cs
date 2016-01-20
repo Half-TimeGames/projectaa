@@ -35,6 +35,8 @@ namespace ProjectaaWebApi.Controllers
             try
             {
                 var result = _userRepository.Find(userId);
+                result.WorkItems = GetWorkItems(result.Id);
+                result.Teams = GetTeams(result.Id);
                 return result;
             }
             catch (Exception e)

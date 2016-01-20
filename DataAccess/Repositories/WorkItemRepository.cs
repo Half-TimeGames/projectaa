@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using System;
+using Dapper;
 using DataAccess.Interfaces;
 using Entities;
 using System.Collections.Generic;
@@ -36,23 +37,23 @@ namespace DataAccess.Repositories
 
         public WorkItem Update(WorkItem workItem)
         {
-            var sqlQuery = "UPDATE WorkItem " +
-                           "SET " +
-                           "Title = @Title," +
-                           "Description = @Description," +
-                           "Status_Id = @StatusId," +
-                           "Issue_Id = @IssueId," +
-                           "Team_Id = @TeamId," +
-                           "User_Id = @UserId" +
-                           " WHERE Id = @Id";
+            const string sqlQuery = "UPDATE WorkItem " +
+                                    "SET " +
+                                    "Title = @Title," +
+                                    "Description = @Description," +
+                                    "Status_Id = @Status.Id," +
+                                    "Issue_Id = @Issue.Id," +
+                                    "Team_Id = @Team.Id," +
+                                    "User_Id = @User.Id" +
+                                    " WHERE Id = @Id";
             _dbConnection.Execute(sqlQuery, workItem);
             return workItem;
         }
 
         public void Remove(int id)
         {
-            var sqlQuery = "DELETE FROM WorkItem " +
-                           "WHERE Id = @Id";
+            const string sqlQuery = "DELETE FROM WorkItem " +
+                                    "WHERE Id = @Id";
             _dbConnection.Execute(sqlQuery, new { id });
         }
 
@@ -76,8 +77,8 @@ namespace DataAccess.Repositories
 
         public List<WorkItem> FindByStatus(int statusId)
         {
-            var sqlQuery = "SELECT * FROM WorkItem " +
-                           "WHERE Status_Id = @StatusId";
+            const string sqlQuery = "SELECT * FROM WorkItem " +
+                                    "WHERE Status_Id = @StatusId";
             return _dbConnection.Query<WorkItem>(sqlQuery, new { StatusId = statusId }).ToList();
         }
     }
