@@ -1,9 +1,7 @@
 ﻿using System;
-using Dapper;
 using DataAccess.Interfaces;
 using Entities;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 
@@ -35,7 +33,7 @@ namespace DataAccess.Repositories
         public WorkItem Find(int id)
         {
             return _dbConnection.QueryWithRetry<WorkItem>("SELECT * FROM WorkItem " +
-                                                "WHERE Id = @Id", new { id }).Single();
+                                                          "WHERE Id = @Id", new { id }).Single();
         }
 
         public WorkItem Add(WorkItem workItem)
@@ -60,10 +58,10 @@ namespace DataAccess.Repositories
         public WorkItem AddUserToWorkItem(int userId, int workItemId)
         {
             const string sqlQuery = "UPDATE WorkItem " +
-                                 "SET " +
-                                 "User_Id = @UserId " +
-                                 "WHERE Id = @WorkItemId " +
-                                 "SELECT * FROM WorkItem WHERE Id = @WorkItemId";
+                                    "SET " +
+                                    "User_Id = @UserId " +
+                                    "WHERE Id = @WorkItemId " +
+                                    "SELECT * FROM WorkItem WHERE Id = @WorkItemId";
             return _dbConnection.QueryWithRetry<WorkItem>(sqlQuery, new {UserId = userId, WorkItemId = workItemId}).Single();
         }
 
@@ -79,26 +77,20 @@ namespace DataAccess.Repositories
 
         public List<WorkItem> FindByDescription(string text)
         {
-            return
-                _dbConnection.QueryWithRetry<WorkItem>(
-                    "SELECT * FROM WorkItem " +
-                    "WHERE Description LIKE '%" + text + "%'")
-                    .ToList();
+            return _dbConnection.QueryWithRetry<WorkItem>("SELECT * FROM WorkItem " +
+                                                          "WHERE Description LIKE '%" + text + "%'").ToList();
         }
 
         public List<WorkItem> FindIfIssue()
         {
-            return
-                _dbConnection.QueryWithRetry<WorkItem>(
-                    "SELECT * FROM WorkItem " +
-                    "WHERE Issue_Id IS NOT NULL")
-                    .ToList();
+            return _dbConnection.QueryWithRetry<WorkItem>("SELECT * FROM WorkItem " +
+                                                          "WHERE Issue_Id IS NOT NULL").ToList();
         }
 
         public List<WorkItem> FindByStatus(int statusId)
         {
             const string sqlQuery = "SELECT * FROM WorkItem " +
-                           "WHERE Status_Id = @StatusId";
+                                    "WHERE Status_Id = @StatusId";
             return _dbConnection.QueryWithRetry<WorkItem>(sqlQuery, new { StatusId = statusId }).ToList();
         }
 
@@ -111,8 +103,6 @@ namespace DataAccess.Repositories
                            "WHERE Status_Id = 3 AND (DateFinished BETWEEN @From AND @To)";
             return _dbConnection.QueryWithRetry<WorkItem>(sqlQuery).ToList();
         }
-
-
 
         public WorkItem UpdateStatus(int statusId, int workItemId)
         {
@@ -127,12 +117,12 @@ namespace DataAccess.Repositories
                 time = null;
             }
             const string sqlQuery = "UPDATE WorkItem " +
-                                   "SET " +
-                                   "Status_Id = @statusId," +
-                                   "DateFinished = @time" +
-                                   " WHERE Id = @workItemId;" +
-                                   " SELECT * FROM WorkItem " +
-                                   " WHERE Id = @workItemId";
+                                    "SET " +
+                                    "Status_Id = @statusId," +
+                                    "DateFinished = @time" +
+                                    " WHERE Id = @workItemId;" +
+                                    " SELECT * FROM WorkItem " +
+                                    " WHERE Id = @workItemId";
             return _dbConnection.QueryWithRetry<WorkItem>(sqlQuery, new { statusId, time, workItemId }).First();
         }
 

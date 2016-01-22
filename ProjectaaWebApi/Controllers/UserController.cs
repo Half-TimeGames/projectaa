@@ -24,7 +24,6 @@ namespace ProjectaaWebApi.Controllers
             {
                 throw new Exception(e.Message);
             }
-
         }
 
         [HttpGet]

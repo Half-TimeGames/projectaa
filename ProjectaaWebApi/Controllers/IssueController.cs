@@ -43,7 +43,6 @@ namespace ProjectaaWebApi.Controllers
             {
                 throw new Exception(e.Message);
             }
-
         }
 
         [HttpGet]
@@ -125,6 +124,5 @@ namespace ProjectaaWebApi.Controllers
                 throw new Exception(e.Message);
             }
         }
-
     }
 }

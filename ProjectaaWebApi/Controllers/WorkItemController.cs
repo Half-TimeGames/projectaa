@@ -131,7 +131,6 @@ namespace ProjectaaWebApi.Controllers
             {
                 throw new Exception(e.Message);
             }
-
         }
 
         [HttpGet]
@@ -178,7 +177,7 @@ namespace ProjectaaWebApi.Controllers
             }
             catch (Exception e)
             {
-                throw new ArgumentException(e.Message);
+                throw new Exception(e.Message);
             }
         }
 

@@ -1,8 +1,6 @@
-﻿using Dapper;
-using DataAccess.Interfaces;
+﻿using DataAccess.Interfaces;
 using Entities;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 
@@ -25,7 +23,7 @@ namespace DataAccess.Repositories
         public Issue Find(int id)
         {
             return _dbConnection.QueryWithRetry<Issue>("SELECT * FROM Issue " +
-                                              "WHERE Id = @Id", new { id }).SingleOrDefault();
+                                                       "WHERE Id = @Id", new { id }).SingleOrDefault();
         }
 
         public List<Issue> GetAll()
@@ -50,7 +48,7 @@ namespace DataAccess.Repositories
         public WorkItem GetWorkItem(int id)
         {
             return _dbConnection.QueryWithRetry<WorkItem>("SELECT * FROM WorkItems " +
-                                                 "WHERE Issue_Id = @Id", new { id }).Single();
+                                                          "WHERE Issue_Id = @Id", new { id }).Single();
         }
 
         public void Remove(int id)
@@ -69,6 +67,5 @@ namespace DataAccess.Repositories
             var newIssue = _dbConnection.QueryWithRetry<Issue>(sqlQuery, issue).Single();
             return newIssue;
         }
-
     }
 }

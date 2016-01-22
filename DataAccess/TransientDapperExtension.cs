@@ -37,7 +37,6 @@ namespace DataAccess
                 },
                 exponentialBackoffStrategy.Name
                 );
-
             return manager;
         }
 
@@ -56,5 +55,4 @@ namespace DataAccess
                 );
         }
     }
-
 }

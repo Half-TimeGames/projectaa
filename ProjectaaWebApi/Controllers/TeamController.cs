@@ -52,7 +52,6 @@ namespace ProjectaaWebApi.Controllers
                 var users = _teamRepository.GetUsers(teamId);
                 return users;
             }
-
             catch (Exception e)
             {
                 throw new Exception(e.Message);
@@ -68,7 +67,6 @@ namespace ProjectaaWebApi.Controllers
                 var workItems = _teamRepository.GetWorkItems(teamId);
                 return workItems;
             }
-
             catch (Exception e)
             {
                 throw new Exception(e.Message);
@@ -138,6 +136,5 @@ namespace ProjectaaWebApi.Controllers
                 throw new Exception(e.Message);
             }
         }
-
     }
 }

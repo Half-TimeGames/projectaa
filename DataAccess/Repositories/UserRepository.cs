@@ -1,12 +1,8 @@
-using System;
-using Dapper;
 using DataAccess.Interfaces;
 using Entities;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 
 namespace DataAccess.Repositories
 {
@@ -17,21 +13,19 @@ namespace DataAccess.Repositories
         public User Add(User user)
         {
             const string sqlQuery = "INSERT INTO [User] (FirstName, LastName, UserName) " +
-                           "VALUES (@" +
-                           "FirstName, @LastName, @UserName)"+
-                           "SELECT Id FROM [User] WHERE Id = scope_identity()";
+                                    "VALUES (@" +
+                                    "FirstName, @LastName, @UserName)" +
+                                    "SELECT Id FROM [User] WHERE Id = scope_identity()";
             if (user == null) return null;
-            var userId = _dbConnection.QueryWithRetry<User>(sqlQuery, new {user.FirstName, user.LastName, user.UserName}).First();
-                
+            var userId = _dbConnection.QueryWithRetry<User>(sqlQuery, new {user.FirstName, user.LastName, user.UserName}).First();              
             user.Id = userId.Id;
-
             return user;
         }
 
         public User Find(int id)
         {
             return _dbConnection.QueryWithRetry<User>("SELECT * FROM [User] " +
-                                             "WHERE Id = @Id", new { id }).SingleOrDefault();
+                                                      "WHERE Id = @Id", new { id }).SingleOrDefault();
         }
 
         public List<User> FindByName(string name)
@@ -62,24 +56,23 @@ namespace DataAccess.Repositories
                            ") AS TBL " +
                            "WHERE NUMBER  BETWEEN((@PageNumber - 1) * @RowspPage + 1)  AND(@PageNumber * @RowspPage)" +
                            "ORDER BY Id";
-
             return _dbConnection.QueryWithRetry<User>(sqlQuery).ToList();
         }
 
         public List<Team> GetTeams(int id)
         {
             const string sqlQuery = "SELECT Team_Id FROM TeamUser " +
-                           "WHERE User_Id = @UserId";
+                                    "WHERE User_Id = @UserId";
             var teamIdList = _dbConnection.QueryWithRetry<int>(sqlQuery, new { UserId = id }).ToList();
 
             return teamIdList.Select(i => _dbConnection.QueryWithRetry<Team>("SELECT * FROM Team " +
-                                                                    "WHERE Id = @TeamId", new { TeamId = i }).Single()).ToList();
+                                                                             "WHERE Id = @TeamId", new { TeamId = i }).Single()).ToList();
         }
 
         public void Remove(int id)
         {
             const string sqlQuery = "DELETE FROM [User] " +
-                           "WHERE Id = @Id";
+                                    "WHERE Id = @Id";
             _dbConnection.QueryWithRetry<User>(sqlQuery, new { id });
         }
 
@@ -95,12 +88,12 @@ namespace DataAccess.Repositories
         public User Update(User user)
         {
             const string sqlQuery = "UPDATE [User] " +
-                           "SET " +
-                           "FirstName = @FirstName," +
-                           "LastName = @LastName," +
-                           "UserName = @UserName" +
-                           " WHERE Id = @Id " +
-                           "SELECT * FROM [User] WHERE Id = @Id";
+                                    "SET " +
+                                    "FirstName = @FirstName," +
+                                    "LastName = @LastName," +
+                                    "UserName = @UserName" +
+                                    " WHERE Id = @Id " +
+                                    "SELECT * FROM [User] WHERE Id = @Id";
             var newUser = _dbConnection.QueryWithRetry<User>(sqlQuery, new {user.FirstName, user.LastName, user.UserName, user.Id}).Single();
             return newUser;
         }
@@ -108,7 +101,7 @@ namespace DataAccess.Repositories
         public List<WorkItem> WorkItems(int id)
         {
             return _dbConnection.QueryWithRetry<WorkItem>("SELECT * FROM WorkItem " +
-                                                 "WHERE User_Id = @UserId", new { UserId = id }).ToList();
+                                                          "WHERE User_Id = @UserId", new { UserId = id }).ToList();
         }
     }
 }

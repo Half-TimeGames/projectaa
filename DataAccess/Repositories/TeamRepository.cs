@@ -1,8 +1,6 @@
-﻿using Dapper;
-using DataAccess.Interfaces;
+﻿using DataAccess.Interfaces;
 using Entities;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 
@@ -25,7 +23,7 @@ namespace DataAccess.Repositories
         public Team Find(int id)
         {
             return _dbConnection.QueryWithRetry<Team>("SELECT * FROM Team " +
-                                             "WHERE Id = @TeamId", new { Teamid = id }).Single();
+                                                      "WHERE Id = @TeamId", new { Teamid = id }).Single();
         }
 
         public List<Team> GetAll()
@@ -40,19 +38,19 @@ namespace DataAccess.Repositories
             var userIdList = _dbConnection.QueryWithRetry<int>(sqlQuery, new { TeamId = id }).ToList();
 
             return userIdList.Select(i => _dbConnection.QueryWithRetry<User>("SELECT * FROM [User] " +
-                                                                    "WHERE Id = @UserId", new { UserId = i }).Single()).ToList();
+                                                                             "WHERE Id = @UserId", new { UserId = i }).Single()).ToList();
         }
 
         public List<WorkItem> GetWorkItems(int id)
         {
             return _dbConnection.QueryWithRetry<WorkItem>("SELECT * FROM WorkItem " +
-                                                 "WHERE Team_Id = @TeamId", new { TeamId = id }).ToList();
+                                                          "WHERE Team_Id = @TeamId", new { TeamId = id }).ToList();
         }
 
         public void Remove(int id)
         {
             _dbConnection.QueryWithRetry<Team>("DELETE FROM Team " +
-                                "WHERE Id = @TeamId", new { TeamId = id });
+                                               "WHERE Id = @TeamId", new { TeamId = id });
         }
 
         public Team Update(Team team)
