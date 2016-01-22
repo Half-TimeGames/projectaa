@@ -53,7 +53,7 @@ namespace DataAccess.Repositories
         public void Remove(int id)
         {
             const string sqlQuery = "DELETE FROM WorkItem " +
-                           "WHERE Id = @Id";
+                                    "WHERE Id = @Id";
             _dbConnection.QueryWithRetry<WorkItem>(sqlQuery, new { id });
         }
 
@@ -139,7 +139,7 @@ namespace DataAccess.Repositories
         public WorkItem FindByIssue(int issueId)
         {
             const string sqlQuery = "SELECT * FROM WorkItem " +
-               "WHERE Issue_Id = @IssueId";
+                                    "WHERE Issue_Id = @IssueId";
             return _dbConnection.QueryWithRetry<WorkItem>(sqlQuery, new { IssueId = issueId }).Single();
         }
     }
